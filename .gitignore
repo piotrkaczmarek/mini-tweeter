@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ignore bundler config.
 /.bundle
 
@@ -18,3 +19,24 @@ doc/
 .DS_Store
 .idea
 .secret
+=======
+*.rbc
+*.sassc
+.sass-cache
+capybara-*.html
+.rspec
+.rvmrc
+/.bundle
+/vendor/bundle
+/log/*
+/tmp/*
+/db/*.sqlite3
+/public/system/*
+/coverage/
+/spec/tmp/*
+**.orig
+rerun.txt
+pickle-email-*.html
+.project
+config/initializers/secret_token.rb
+>>>>>>> a120c9dfbc1c82eeefb52f58ddbbd872750f6f13
