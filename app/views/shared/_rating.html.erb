@@ -1,0 +1,38 @@
+  <div class="row-fluid rating">
+    <div class="span4">
+    Rated <%=micropost.rating%> by <%=pluralize(micropost.rated_by,"user")%>.
+    </div>
+    <div class="span1">
+      Rate now :
+    </div>
+    <div class="span3">
+      <ul class="inline">
+        <li>
+          <%= button_to "1", { controller: :microposts, action: :rate,
+             rate: '1', id: micropost.id }, class: "btn btn-mini rate_button",
+             method: :put%>
+        </li>
+        <li>
+          <%= button_to "2", { controller: :microposts, action: :rate,
+             rate: '2', id: micropost.id }, class: "btn btn-mini rate_button",
+             method: :put%>
+        </li>
+        <li>
+          <%= button_to "3", { controller: :microposts, action: :rate,
+             rate: '3', id: micropost.id }, class: "btn btn-mini rate_button",
+             method: :put%>
+        </li>
+        <li>
+          <%= button_to "4", { controller: :microposts, action: :rate,
+             rate: '4', id: micropost.id }, class: "btn btn-mini rate_button",
+             method: :put%>
+        </li>
+        <li>
+          <%= button_to "5", { controller: :microposts, action: :rate,
+             rate: '5', id: micropost.id }, class: "btn btn-mini rate_button",
+             method: :put%>
+        </li>
+      </ul>
+    </div>
+  </div>
+  </span>

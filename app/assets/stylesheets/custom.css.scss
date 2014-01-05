@@ -191,6 +191,23 @@ input {
     border-top: 1px solid #e8e8e8;
   }
 }
+.rating {
+  background-color: $grayLighter;
+
+}
+.rate_now {
+  display: block;
+  background-color: $grayLight;
+}
+.rate_button {
+  padding: 0.3em;
+  display: inline;
+  margin: 0;
+}
+.rate_button:hover
+{
+  color: red;
+}
 .content {
   display: block;
 }
@@ -201,6 +218,7 @@ input {
   float: left;
   margin-right: 10px;
 }
+
 aside {
   textarea {
     height: 100px;
