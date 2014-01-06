@@ -193,7 +193,6 @@ input {
 }
 .rating {
   background-color: $grayLighter;
-
 }
 .rate_now {
   display: block;
@@ -203,6 +202,7 @@ input {
   padding: 0.3em;
   display: inline;
   margin: 0;
+  height: 0.1em;
 }
 .rate_button:hover
 {

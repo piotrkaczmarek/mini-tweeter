@@ -15,10 +15,15 @@ class MicropostsController < ApplicationController
   def rate
     @micropost = Micropost.find_by_id(params.require(:id))
     if @micropost
-      @micropost.add_rate(current_user.id,params.require(:rate).to_f)
+      user = current_user
+      @micropost.rate_it(user.id,params.require(:rate).to_f)
       if @micropost.save
         flash[:succes] = "You just gave this post #{params[:rate]} points!"
+      else
+        flash[:error] = "Rating failed!"
       end
+    else
+      flash[:error] = "Error: micropost database query failed!"
     end
     redirect_to root_url
   end

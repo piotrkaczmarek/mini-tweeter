@@ -1,14 +1,67 @@
 Feature: Rating microposts
+  As a tweet follower and reader
+  So that I can give others my opinion
+  I want to rate tweets
 
-  Scenario: Rating micropost for the first time
-    Given a user visits the home page
-    When he clicks 'rate 3' button
-    Then he should see rated_by equal 1
-    And he should see rating equal 3
+Background: microposts in database
+  Given the following users exist:
+  | id | name | email            |
+  | 0  | John | john@example.com |
+  | 1  | Bob  | bob@example.com  |
 
-  Scenario: Rating the same micropost for the second time
-    Given a user visits the home page
-    When he clicks 'rate 3' button
-    And he clicks 'rate 4' button
-    Then he should see rated_by equal 1
-    And he should see rating equal 4
+  Given I am logged in as John
+
+  Given the following microposts exist:
+  | id | content | rated_by | rating | user |
+  | 1  | "text"  | 0        | 0.0    | John |
+  | 2  | "bobs"  | 2        | 4.0    | Bob  |
+
+#  Given the following relationships exist:
+#  | follower_id | followed_id |
+#  | John        | Bob         | 
+
+
+  Scenario: rate micropost for the first time
+    Given I am on the home page
+    When I give micropost 1 a rate of 4
+    Then I should see "by 1 user"
+    And I should see "Rated 4.0 "
+
+  Scenario: rate micropost for the second time
+    Given I am on the home page
+    When I give micropost 1 a rate of 4
+    And I give micropost 1 a rate of 3
+    Then I should see "by 1 user"
+    And I should see "Rated 3.0 "
+
+  Scenario: rate micropost several times
+   Given I am on the home page
+   When I give micropost 1 a rate of 1
+   Then I should see "Rated 1.0 "
+   And I give micropost 1 a rate of 2
+   Then I should see "Rated 2.0 "
+   And I give micropost 1 a rate of 3
+   Then I should see "Rated 3.0 "
+   And I give micropost 1 a rate of 4
+   Then I should see "Rated 4.0 "
+   And I give micropost 1 a rate of 5
+   Then I should see "Rated 5.0 "
+   And I give micropost 1 a rate of 4
+   Then I should see "Rated 4.0 "
+   And I give micropost 1 a rate of 3
+   Then I should see "Rated 3.0 "
+   And I give micropost 1 a rate of 2
+   Then I should see "Rated 2.0 "
+   And I give micropost 1 a rate of 1
+   Then I should see "Rated 1.0 "
+   
+
+  Scenario: rate micopost of other user
+    Given I follow Bob
+    And I am on the home page
+    When I give micropost 2 a rate of 5
+    Then I should see "by 3 users"
+    And I should see "Rated 4.33 "
+
+  
+    

@@ -1,36 +1,36 @@
   <div class="row-fluid rating">
     <div class="span4">
-    Rated <%=micropost.rating%> by <%=pluralize(micropost.rated_by,"user")%>.
+    Rated <%=micropost.rating.round(2)%> by <%=pluralize(micropost.rated_by,"user")%>.
     </div>
     <div class="span1">
       Rate now :
     </div>
     <div class="span3">
       <ul class="inline">
-        <li>
+        <li class="rate_button">
           <%= button_to "1", { controller: :microposts, action: :rate,
              rate: '1', id: micropost.id }, class: "btn btn-mini rate_button",
-             method: :put%>
+             id: "rate_micropost_#{micropost.id}_with_1" ,method: :put%>
         </li>
-        <li>
+        <li class="rate_button">
           <%= button_to "2", { controller: :microposts, action: :rate,
              rate: '2', id: micropost.id }, class: "btn btn-mini rate_button",
-             method: :put%>
+             id: "rate_micropost_#{micropost.id}_with_2" ,method: :put%>
         </li>
-        <li>
+        <li class="rate_button">
           <%= button_to "3", { controller: :microposts, action: :rate,
              rate: '3', id: micropost.id }, class: "btn btn-mini rate_button",
-             method: :put%>
+             id: "rate_micropost_#{micropost.id}_with_3" ,method: :put%>
         </li>
-        <li>
+        <li class="rate_button">
           <%= button_to "4", { controller: :microposts, action: :rate,
              rate: '4', id: micropost.id }, class: "btn btn-mini rate_button",
-             method: :put%>
+             id: "rate_micropost_#{micropost.id}_with_4" ,method: :put%>
         </li>
-        <li>
+        <li class="rate_button">
           <%= button_to "5", { controller: :microposts, action: :rate,
              rate: '5', id: micropost.id }, class: "btn btn-mini rate_button",
-             method: :put%>
+             id: "rate_micropost_#{micropost.id}_with_5" ,method: :put%>
         </li>
       </ul>
     </div>
