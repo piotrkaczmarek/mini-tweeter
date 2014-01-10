@@ -1,7 +1,17 @@
 <%= form_for(@micropost) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
+  <%if @original_post %>
+    <%= "#{@original_post.user.name} wrote #{time_ago_in_words(@original_post.created_at)} ago:" %>
+    <div class="content">
+      <%= @original_post.content %>
+    </div>
+  <% end %> 
   <div class="field">
     <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+    <% if @original_post %>
+      <%= f.hidden_field :answer_to_id, value: @original_post.id%>
+    <% end %>
   </div>
   <%= f.submit "Post", class: "btn btn-large btn-primary" %>
 <% end %>
+

@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe MicropostsController do
-  describe "when rating micropost" do
+  before(:each) do
+    MicropostsController.any_instance.stub(:signed_in_user)
+  end
+  describe "#rate_it" do
     before(:each) do
-      MicropostsController.any_instance.stub(:signed_in_user)
       @fake_post = mock('post1')
       @fake_post.stub(:rate_it)
       @fake_post.stub(:save).and_return(true)
@@ -32,9 +34,19 @@ describe MicropostsController do
         put :rate, { rate: 4, id: 1 }
       end
     end
-    
-
-
-
   end
+
+  describe "#answer" do
+    before do
+      @fake_post = mock('post1')
+      @fake_post.stub(:id).and_return(1)
+      Micropost.stub(:find_by_id).and_return(@fake_post)
+    end
+    it "should find post" do
+      Micropost.should_receive(:find_by_id).with("1")
+      post :answer, { id: 1 }
+    end
+  end
+
+
 end 

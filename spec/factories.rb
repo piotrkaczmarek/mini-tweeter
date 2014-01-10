@@ -16,4 +16,9 @@ FactoryGirl.define do
     rated_by 0
     rating 0
   end
+
+  factory :organization do
+    name "LoremCorp"
+ #   admin user # invalid syntax
+  end
 end

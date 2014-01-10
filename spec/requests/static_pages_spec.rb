@@ -21,7 +21,7 @@ describe "StaticPages" do
 
       it "should render the user's feed" do
         user.feed.each do |item|
-          expect(page).to have_selector("li##{item.id}", text: item.content)
+          expect(page).to have_selector("div#micropost_#{item.id}", text: item.content)
         end
       end
 
@@ -36,6 +36,7 @@ describe "StaticPages" do
         it { should have_link("1 followers", href: followers_user_path(user)) }
       end
     end
+
   end
 
   describe "Help page" do

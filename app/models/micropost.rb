@@ -41,7 +41,16 @@ class Micropost < ActiveRecord::Base
     self.rating = sum_score/rated_by
     return @rate
   end
-
+  def answer_to
+    Micropost.find_by_id(self.answer_to_id)
+  end
+  def answered? 
+    if Micropost.find_by_answer_to_id(self.id)
+      true
+    else
+      false
+    end
+  end
   private
       def clear_rating
         if self.rated_by == nil

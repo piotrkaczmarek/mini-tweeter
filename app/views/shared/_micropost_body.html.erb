@@ -1,0 +1,49 @@
+<div class="micropost_body" id=<%="micropost_#{micropost.id}"%>>
+
+  <span class="content"><%= micropost.content %></span>
+  <span class="timestamp">
+  Posted <%= time_ago_in_words(micropost.created_at) %> ago.
+  </span>
+   <%if micropost.answer_to_id %>
+     <% original_post = micropost.answer_to %>
+     <div class="row-fluid">
+       <div class="span2">
+         Answer to
+       </div>
+       <div class="span10">
+         <div class="row">
+           <div class="content">
+             <%= original_post.content %>
+           </div>
+
+         </div>
+         <div class="row timestamp">
+           <div class="span8">
+             <%= "Posted by #{original_post.user.name}" %>
+             <%= "#{time_ago_in_words(original_post.created_at)} ago." %>
+           </div>
+         </div>
+       </div>
+     </div>
+     <br>
+   <% end %> 
+  <div class="row-fluid rating">
+    <div class="span1">
+      <%= button_to "answer", { controller: :microposts, action: :answer,
+        id: micropost.id }, class: "btn btn-mini",
+        id: "answer_micropost_#{micropost.id}" %>
+    </div>
+    <div class="span1">
+      <% if (current_user?(micropost.user) and not micropost.answered?) %>
+        <%= button_to "delete", micropost, method: :delete,
+                                       class: "btn btn-mini btn-danger",
+                                       data: { confirm: "Are you sure?" }%>
+      <% end %>
+    </div>
+
+    <div class="span7">
+      <%= render 'shared/rating', micropost: micropost %>
+    </div>
+  </div>
+
+</div>

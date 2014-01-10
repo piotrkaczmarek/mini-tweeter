@@ -21,6 +21,7 @@ describe User do
   it { should respond_to(:follow!) }
   it { should respond_to(:unfollow!) }
   it { should respond_to(:remember_token)}
+  it { should respond_to(:organization)}
 
   it { should be_valid }
   it { should_not be_admin }
@@ -195,4 +196,26 @@ describe User do
       its(:followed_users) { should_not include(other_user) }
     end
   end
+
+  describe "organization" do
+      before do
+        @user.save
+        @organization = Organization.create(name: "corpo", admin_id: @user.id)
+        @user.organization_id = @organization.id
+      end 
+    describe "when user is admin" do
+      its(:organization) { should eq @organization }
+    end
+    describe "when user is member" do
+      before do
+        @user2 = FactoryGirl.create(:user, { organization_id: @organization.id } )
+      end
+      it "its organization should be organization" do
+        expect(@user.organization).to eq @organization
+      end
+    end
+ 
+  end
+
+ 
 end

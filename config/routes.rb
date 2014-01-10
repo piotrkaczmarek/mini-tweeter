@@ -8,6 +8,7 @@ TutorialApp::Application.routes.draw do
   resources :microposts, only: [:create, :destroy] do 
     member do
       put :rate
+      post :answer
     end
   end
   resources :sessions, only: [:new, :create, :destroy]

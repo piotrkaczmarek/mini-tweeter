@@ -1,10 +1,10 @@
 class MicropostsController < ApplicationController
-  before_action :signed_in_user, only: [:create, :destroy, :rate]
+  before_action :signed_in_user, only: [:create, :destroy, :rate, :answer]
   before_action :correct_user, only: :destroy
   def create
     @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save
-      flash[:succes] = "Micropost created!"
+      flash[:success] = "Micropost created!"
       redirect_to root_url
     else
       @feed_items = []
@@ -18,12 +18,10 @@ class MicropostsController < ApplicationController
       user = current_user
       @micropost.rate_it(user.id,params.require(:rate).to_f)
       if @micropost.save
-        flash[:succes] = "You just gave this post #{params[:rate]} points!"
+        flash[:success] = "You just gave this post #{params[:rate]} points!"
       else
         flash[:error] = "Rating failed!"
       end
-    else
-      flash[:error] = "Error: micropost database query failed!"
     end
     redirect_to root_url
   end
@@ -33,10 +31,18 @@ class MicropostsController < ApplicationController
     redirect_to root_url
   end
 
+
+  def answer
+    original_post = Micropost.find_by_id(params.require(:id))
+    if original_post
+      flash[:original_post_id] = original_post.id
+    end
+    redirect_to root_url
+  end
   private
 
     def micropost_params
-      params.require(:micropost).permit(:content)
+      params.require(:micropost).permit(:content, :answer_to_id)
     end
 
     def correct_user

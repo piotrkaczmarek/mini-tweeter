@@ -1,4 +1,6 @@
-<%= link_to gravatar_for(current_user, size: 52), current_user %>
+<% if gravatar = gravatar_for(current_user, size: 52) %>
+<%= link_to gravatar, current_user %>
+<% end %>
 <h1>
   <%= current_user.name %>
 </h1>
