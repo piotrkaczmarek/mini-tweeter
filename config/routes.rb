@@ -11,6 +11,9 @@ TutorialApp::Application.routes.draw do
       post :answer
     end
   end
+  resources :organizations
+
+
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships, only: [:create, :destroy]
   root 'static_pages#home'

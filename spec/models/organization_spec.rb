@@ -4,6 +4,7 @@ describe Organization do
   describe "validation" do
     let(:user) { FactoryGirl.create(:user) }
     let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
+
     before do 
       user.organization_id = organization.id
       user.save

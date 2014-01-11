@@ -19,6 +19,7 @@ FactoryGirl.define do
 
   factory :organization do
     name "LoremCorp"
- #   admin user # invalid syntax
+    #association :admin, factory: :user
+    #admin_id admin.id
   end
 end
