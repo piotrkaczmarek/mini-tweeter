@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :signed_in_user
-  before_action :organization_admin, only: [:destroy, :add_member, :remove_member]
+  before_action :organization_admin, only: [:destroy, :update, :add_member, :remove_member]
 
   def create
     @organization = Organization.new(organization_params)
@@ -13,7 +13,12 @@ class OrganizationsController < ApplicationController
     end
   end
   def update 
-
+    if @organization.update_attributes(organization_params)
+      flash[:success] = "Organization profile updated"
+      redirect_to root_url
+    else
+      render 'edit'
+    end
   end
   def destroy
     @organization.destroy

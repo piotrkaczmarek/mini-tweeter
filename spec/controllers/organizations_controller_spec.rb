@@ -61,7 +61,7 @@ describe OrganizationsController do
       describe "updating homesite_url" do
         before do
           @new_url = "new_url.com" 
-          post :update, { id: organization.id, homesite_url: @new_url }
+          post :update, { id: organization.id, organization: { homesite_url: @new_url } }
         end
         it "should change homesite_url" do
           expect(Organization.find(organization.id).homesite_url).to eq @new_url
@@ -74,7 +74,7 @@ describe OrganizationsController do
       describe "updating name" do
         before do
           @new_name = "new_name"
-          post :update, { id: organization.id, name: @new_name }
+          post :update, { id: organization.id, organization: { name: @new_name } }
         end
         it "should change name" do
           expect(Organization.find(organization.id).name).to eq @new_name
@@ -88,7 +88,7 @@ describe OrganizationsController do
         before do
           @new_name = "new_name"
           @new_url = "new_url.com"
-          post :update, { id: organization.id, name: @new_name, homesite_url: @new_url }
+          post :update, { id: organization.id, organization: { name: @new_name, homesite_url: @new_url } }
         end
         it "should change name" do
           expect(Organization.find(organization.id).name).to eq @new_name
@@ -103,13 +103,13 @@ describe OrganizationsController do
           before do
             @new_name = ""
             @new_url = "new_url.com"
-          post :update, { id: organization.id, name: @new_name, homesite_url: @new_url }
+          post :update, { id: organization.id, organization: { name: @new_name, homesite_url: @new_url } }
           end
           it "should not change name" do
             expect(Organization.find(organization.id).name).to eq old_name          
           end
           it "should change homesite_url" do
-            expect(Organization.find(organization.id).homesite_url).to eq @new_url
+            expect(Organization.find(organization.id).homesite_url).to eq old_url
           end
         end
     #    describe "when providing invalid homesite_url and valid name" do # no validation on homesite_url yet
@@ -127,7 +127,7 @@ describe OrganizationsController do
         before do
           @new_name = "new_name"
           @new_url = "new_url.com"
-          post :update, { id: organization.id, name: @new_name, homesite_url: @new_url }
+          post :update, { id: organization.id, organization: { name: @new_name, homesite_url: @new_url } }
         end
         it "should not change name" do
           expect(Organization.find(organization.id).name).to eq old_name 
