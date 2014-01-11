@@ -20,11 +20,16 @@ describe OrganizationsController do
       post :create, {  organization: { name: @organization.name, homesite_url: nil } }
       assigns(:organization).admin_id.should == user.id
     end
+    it "should assign current user as a member" do
+      post :create, {  organization: { name: @organization.name, homesite_url: nil } }
+      assigns(:organization).members.should == [user]    
+    end
   
   end
 
   describe "#destroy" do
-    let(:organization) { Organization.create(name: "corpo", admin_id: user.id) } 
+    let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
+    before { user.organization_id = organization.id }
 
     describe "when logged in as organization admin" do
       before do
@@ -33,6 +38,9 @@ describe OrganizationsController do
       end
       it "should decrease organization count" do
         expect(Organization.count).to eq 0
+      end
+      it "should delete user's organization_id" do
+        expect(user.organization_id).to eq nil
       end
     end
 
@@ -141,19 +149,67 @@ describe OrganizationsController do
 
 
   describe "#add_member" do
+    let(:organization) { Organization.create(name: "org_name", admin_id: user.id) } 
     before :each do
-      let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
+      user.organization_id = organization.id
+      user.save
       @user = FactoryGirl.create(:user)
-      post :add_member, {user_id: 1, organization_id: organization.id, new_member_id: @user.id }
     end
-  
+
+    describe "when logged in as organization admin" do
+      before { OrganizationsController.any_instance.stub(:current_user).and_return(user) }
+
+      describe "when adding a new user" do
+        it "should increase organization members count" do
+          expect do
+            post :add_member, {id: organization.id, new_member_id: @user.id }
+          end.to change(organization.members,:count).by(1)
+        end
+        it "should have correct members" do
+          post :add_member, {id: organization.id, new_member_id: @user.id }
+          expect(organization.members).to eq [user, @user]
+        end
+      end
+
+      describe "when adding user that already is a member" do
+        before do
+          @user.organization_id = organization.id 
+          @user.save!
+        end
+        it "should not change organization members count" do
+          expect do
+            post :add_member, {id: organization.id, new_member_id: @user.id }
+          end.to change(organization.members,:count).by(0)
+        end
+        it "should have correct members" do
+          post :add_member, {id: organization.id, new_member_id: @user.id }
+          expect(organization.members).to eq [user, @user]
+        end
+      end
+    end
+
+    describe "when not logged in as organization admin" do
+      before { OrganizationsController.any_instance.stub(:current_user).and_return(@user) }
+
+      describe "when adding a new user" do
+        it "should not change organization members count" do
+          expect do
+            post :add_member, {id: organization.id, new_member_id: @user.id }
+          end.to change(organization.members,:count).by(0)
+        end
+        it "should have correct members" do
+          post :add_member, {id: organization.id, new_member_id: @user.id }
+          expect(organization.members).to eq [user]
+        end        
+      end
+    end
   end
 
   describe "#remove_member" do
+    let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
     before :each do
-      let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
       @user = FactoryGirl.create(:user, organization_id: organization.id)
-      post :remove_member, {user_id: 1, organization_id: @organization.id, new_member_id: @user.id }
+      post :remove_member, {user_id: 1, id: @organization.id, new_member_id: @user.id }
     end
   end
 

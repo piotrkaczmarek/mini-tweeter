@@ -4,8 +4,11 @@ class OrganizationsController < ApplicationController
 
   def create
     @organization = Organization.new(organization_params)
-    @organization.admin_id = current_user.id
+    @user = current_user
+    @organization.admin_id = @user.id
     if @organization.save
+      @user.organization_id = @organization.id
+      @user.save
       flash[:success] = "#{@organization.name} successfully created!"
       redirect_to root_url
     else
@@ -22,11 +25,20 @@ class OrganizationsController < ApplicationController
   end
   def destroy
     @organization.destroy
+    @current_user.organization_id = nil
+    @current_user.save
     redirect_to root_url
   end
 
   def add_member
-
+    @new_member = User.find(params.require(:new_member_id))
+    @new_member.disable_password_validation
+    if @new_member.update_attributes(organization_id: @organization.id)
+      flash[:success] = "#{@new_member.name} added to #{@organization.name} successfully!"
+    else
+      flash[:error] = "Adding new member failed!"
+    end
+    redirect_to root_url
   end
 
   def remove_member
@@ -36,7 +48,8 @@ class OrganizationsController < ApplicationController
   private
     def organization_admin
       @organization = Organization.find(params[:id])
-      redirect_to root_url unless current_user.id == @organization.admin_id
+      @current_user = current_user
+      redirect_to root_url unless @current_user.id == @organization.admin_id
     end
     
     def organization_params
