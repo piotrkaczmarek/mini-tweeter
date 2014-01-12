@@ -29,8 +29,9 @@ describe OrganizationsController do
 
   describe "#destroy" do
     let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
-    before { user.organization_id = organization.id }
-
+    before :each do
+      user.organization_id = organization.id 
+    end
     describe "when logged in as organization admin" do
       before do
         OrganizationsController.any_instance.stub(:current_user).and_return(user) 
@@ -301,21 +302,51 @@ describe OrganizationsController do
   end
   
   describe "#change_admin" do
-  
+    before :each do
+      @organization = Organization.create(name: "org_name", admin_id: user.id) 
+    end
+    let(:user2) { FactoryGirl.create(:user, organization_id: @organization.id) }
+    let(:user3) { FactoryGirl.create(:user, organization_id: @organization.id + 1) }
     describe "when logged in as organization admin" do
-      
-      describe "when changing admin to member of the organization" do
+      before do
+        OrganizationsController.any_instance.stub(:current_user).and_return(user)
+      end
 
+      describe "when changing admin to member of the organization" do
+        it "should change admin_id" do
+          post :change_admin, { id: @organization.id, new_admin_id: user2.id }
+          expect(Organization.find(@organization.id).admin_id).to eq user2.id
+        end
       end
 
       describe "when changing admin to user that is not a member of organization" do
+        before { post :change_admin, { id: @organization.id, new_admin_id: user3.id } }
+        it "should not change admin_id" do
+          expect(Organization.find(@organization.id).admin_id).to eq user.id
+        end
+        it "should show explanation message" do
+          expect(flash[:error]).to eq "Can't change admin to user that is not a member of organization. Invite him first."
+        end
+      end
 
+      describe "when changin admin to non-existent user" do
+        it "should not change admin_id" do
+          post :change_admin, { id: @organization.id, new_admin_id: 99999 }
+          expect(Organization.find(@organization.id).admin_id).to eq user.id
+        end
       end
     end
     
     describe "when not logged in as organization admin" do
-      describe "when changing admin to member of the organization" do
+      before do
+        OrganizationsController.any_instance.stub(:current_user).and_return(user2) 
+      end
 
+      describe "when changing admin to member of the organization" do
+        it "should not change admin_id" do
+          post :change_admin, { id: @organization.id, new_admin_id: user2.id }
+          expect(Organization.find(@organization.id).admin_id).to eq user.id
+        end
       end
     end
   end

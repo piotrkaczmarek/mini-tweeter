@@ -15,6 +15,7 @@ TutorialApp::Application.routes.draw do
     member do
       post :add_member
       post :remove_member
+      post :change_admin
     end
   end
 

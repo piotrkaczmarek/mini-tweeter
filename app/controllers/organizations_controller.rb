@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :signed_in_user
-  before_action :organization_admin, only: [:destroy, :update, :add_member]
+  before_action :organization_admin, only: [:destroy, :update, :add_member, :change_admin]
 
   def create
     @organization = Organization.new(organization_params)
@@ -63,6 +63,17 @@ class OrganizationsController < ApplicationController
     redirect_to root_url
   end
 
+  def change_admin
+    if new_admin_exists?
+      if @new_admin.organization_id == @organization.id
+        @organization.admin_id = @new_admin.id
+        @organization.save
+      else
+        flash[:error] = "Can't change admin to user that is not a member of organization. Invite him first."
+      end
+      redirect_to root_url
+    end
+  end
   private
     def organization_admin
       @organization = Organization.find(params[:id])
@@ -72,6 +83,11 @@ class OrganizationsController < ApplicationController
     
     def organization_params
       params.require(:organization).permit(:name,:homesite_url)
+    end
+
+    def new_admin_exists?
+      redirect_to root_url unless @new_admin = User.find_by_id(params.require(:new_admin_id))
+      @new_admin
     end
 
 end
