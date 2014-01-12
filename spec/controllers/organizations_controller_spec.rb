@@ -351,4 +351,74 @@ describe OrganizationsController do
     end
   end
 
+  describe "#show" do
+    before :each do
+      @member1 = FactoryGirl.create(:user)
+      @organization = Organization.create(name: "OrgCorp", admin_id: @member1.id)
+      @member1.organization_id = @organization.id
+      @member1.save!
+      @member2 = FactoryGirl.create(:user, organization_id: @organization.id)
+      @not_member1 = FactoryGirl.create(:user, organization_id: @organization.id+1)
+      @not_member2 = FactoryGirl.create(:user)
+      @member1.microposts.create(content: "post1")
+      @member1.microposts.create(content: "post2")
+      @member2.microposts.create(content: "post3")
+      @not_member1.microposts.create(content: "post4")
+      @not_member2.microposts.create(content: "post5")
+
+      get :show, { id: @organization.id, page: 1}
+    end
+    it "should show organization" do
+      assigns(:organization).should == @organization
+    end
+    it "should show only members" do
+      assigns(:members).should == [@member1, @member2]
+    end
+    it "should have proper number of posts" do
+      assigns(:microposts).count.should == 3
+    end
+  end
+
+  describe "#list_members" do
+    before :each do
+      @member1 = FactoryGirl.create(:user)
+      @organization = Organization.create(name: "OrgCorp", admin_id: @member1.id)
+      @member1.organization_id = @organization.id
+      @member1.save!
+      @member2 = FactoryGirl.create(:user, organization_id: @organization.id)
+      @not_member1 = FactoryGirl.create(:user, organization_id: @organization.id+1)
+      @not_member2 = FactoryGirl.create(:user)
+      get :list_members, { id: @organization.id }
+    end
+    it "should show organization" do
+      assigns(:organization).should == @organization
+    end
+    it "should show only members" do
+      assigns(:members).should == [@member1, @member2]
+    end
+    it "should show admin" do
+      assigns(:admin).should == @member1
+    end
+  end
+
+  describe "#index" do
+    before do
+      @user1 = FactoryGirl.create(:user)
+      @org1 = Organization.create(name: "Org1", admin_id: @user1.id)
+      @user1.organization_id = @org1.id
+      @user1.save!
+      @user2 = FactoryGirl.create(:user)
+      @org2 = Organization.create(name: "Org2", admin_id: @user2.id)
+      @user2.organization_id = @org2.id
+      @user2.save!
+
+      get :index
+    end
+
+    it "should show all organizations" do
+      assigns(:organizations).should == [@org1, @org2]
+    end
+  end
+
+
 end

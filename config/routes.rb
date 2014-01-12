@@ -11,11 +11,12 @@ TutorialApp::Application.routes.draw do
       post :answer
     end
   end
-  resources :organizations, only: [:create, :update, :destroy] do
+  resources :organizations, only: [:show, :index,:create, :update, :destroy] do
     member do
       post :add_member
       post :remove_member
       post :change_admin
+      get :list_members
     end
   end
 

@@ -2,6 +2,29 @@ class OrganizationsController < ApplicationController
   before_action :signed_in_user
   before_action :organization_admin, only: [:destroy, :update, :add_member, :change_admin]
 
+  def index
+    @organizations = Organization.paginate(page: params[:page])
+  end
+
+  def show
+    @organization = Organization.find(params[:id])
+    @members = @organization.members.paginate(page: params[:page])
+    @microposts = []
+    @members.each do |member|
+      member.microposts.each do |post|
+        @microposts << post
+      end
+    end
+    render 'show'
+  end
+
+  def list_members
+    @organization = Organization.find(params[:id])
+    @members = @organization.members.paginate(page: params[:page])
+    @admin = User.find(@organization.admin_id)
+    render 'list_members'
+  end
+
   def create
     @organization = Organization.new(organization_params)
     @user = current_user
