@@ -34,13 +34,17 @@ describe OrganizationsController do
     describe "when logged in as organization admin" do
       before do
         OrganizationsController.any_instance.stub(:current_user).and_return(user) 
+        @user2 = FactoryGirl.create(:user, organization_id: organization.id)
         delete :destroy, { id: organization.id }
       end
       it "should decrease organization count" do
         expect(Organization.count).to eq 0
       end
       it "should delete user's organization_id" do
-        expect(user.organization_id).to eq nil
+        expect(User.find(user.id).organization_id).to eq nil
+      end
+      it "should delete other members' organization_id" do
+        expect(User.find(@user2.id).organization_id).to eq nil
       end
     end
 
@@ -206,10 +210,113 @@ describe OrganizationsController do
   end
 
   describe "#remove_member" do
-    let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
+    let(:organization) { Organization.create(name: "org_name", admin_id: user.id) } 
     before :each do
+      user.organization_id = organization.id
+      user.save
       @user = FactoryGirl.create(:user, organization_id: organization.id)
-      post :remove_member, {user_id: 1, id: @organization.id, new_member_id: @user.id }
+    end
+    describe "when logged in as organization admin" do
+      before { OrganizationsController.any_instance.stub(:current_user).and_return(user) }
+
+      describe "when removing other member" do
+        it "should change organization members count" do
+          expect do
+            post :remove_member, {id: organization.id, member_id: @user.id }
+          end.to change(organization.members, :count).by(-1)
+        end
+        it "should have correct members" do
+          post :remove_member, {id: organization.id, member_id: @user.id }
+          expect(organization.members).to eq [user]
+        end
+      end
+
+      describe "when removing himself" do
+        it "should not change organization members count" do
+          expect do
+            post :remove_member, {id: organization.id, member_id: user.id }
+          end.to change(organization.members, :count).by(0)
+        end
+        it "should show explanation message" do
+          post :remove_member, {id: organization.id, member_id: user.id }
+          expect(flash[:error]).to eq "You cannot remove organization admin. Change admin first or delete organization."
+        end
+      end
+    
+      describe "when removing user that is not a member of organization" do
+        before do
+          @user2_org = organization.id + 1
+          @user2 = FactoryGirl.create(:user, organization_id: @user2_org)
+        end
+        it "should not change user's organization_id" do
+          post :remove_member, {id: organization.id, member_id: @user2.id }
+          expect(@user2.organization_id).to eq @user2_org
+        end
+        it "should not change organization members count" do
+          expect do
+            post :remove_member, {id: organization.id, member_id: @user2.id }
+          end
+        end
+      end
+
+    end
+    describe "when logged in as non-admin member" do
+      before { OrganizationsController.any_instance.stub(:current_user).and_return(@user) }
+      
+      describe "when removing himself" do
+        it "should change user's organization_id" do
+          post :remove_member, {id: organization.id, member_id: @user.id }
+          expect(User.find(@user.id).organization_id).to eq nil
+        end
+        it "should change organization members count" do
+          expect do
+            post :remove_member, {id: organization.id, member_id: @user.id }
+          end.to change(organization.members, :count).by(-1)
+        end
+        it "should have correct members" do
+          post :remove_member, {id: organization.id, member_id: @user.id }
+          expect(organization.members).to eq [user]
+        end
+      end
+
+      describe "when removing other member" do
+        before do
+          @user2 = FactoryGirl.create(:user, organization_id: organization.id)
+        end
+        it "should not change user's organization_id" do
+          post :remove_member, {id: organization.id, member_id: @user2.id }
+          expect(User.find(@user2.id).organization_id).to eq organization.id
+        end
+        it "should not change organization members count" do
+          expect do
+            post :remove_member, {id: organization.id, member_id: @user2.id }
+          end.to change(organization.members, :count).by(0)
+        end
+        it "should have correct members" do
+          post :remove_member, {id: organization.id, member_id: @user2.id }
+          expect(organization.members).to eq [user, @user, @user2]
+        end
+      end
+    end
+  end
+  
+  describe "#change_admin" do
+  
+    describe "when logged in as organization admin" do
+      
+      describe "when changing admin to member of the organization" do
+
+      end
+
+      describe "when changing admin to user that is not a member of organization" do
+
+      end
+    end
+    
+    describe "when not logged in as organization admin" do
+      describe "when changing admin to member of the organization" do
+
+      end
     end
   end
 

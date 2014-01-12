@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :signed_in_user
-  before_action :organization_admin, only: [:destroy, :update, :add_member, :remove_member]
+  before_action :organization_admin, only: [:destroy, :update, :add_member]
 
   def create
     @organization = Organization.new(organization_params)
@@ -8,7 +8,8 @@ class OrganizationsController < ApplicationController
     @organization.admin_id = @user.id
     if @organization.save
       @user.organization_id = @organization.id
-      @user.save
+      @user.disable_password_validation
+      @user.save!
       flash[:success] = "#{@organization.name} successfully created!"
       redirect_to root_url
     else
@@ -24,9 +25,12 @@ class OrganizationsController < ApplicationController
     end
   end
   def destroy
+    @organization.members.each do |member| 
+      member.organization_id = nil
+      member.disable_password_validation
+      member.save!
+    end
     @organization.destroy
-    @current_user.organization_id = nil
-    @current_user.save
     redirect_to root_url
   end
 
@@ -42,7 +46,21 @@ class OrganizationsController < ApplicationController
   end
 
   def remove_member
+    @organization = Organization.find(params[:id])
+    @current_user = current_user
+    member_id = params.require(:member_id)
 
+    if (member_id == @current_user.id.to_s or @current_user.id == @organization.admin_id)
+      if member_id == @organization.admin_id.to_s
+        flash[:error] = "You cannot remove organization admin. Change admin first or delete organization."
+      else
+        @member = User.find(member_id)
+        @member.organization_id = nil
+        @member.disable_password_validation
+        @member.save!        
+      end
+    end
+    redirect_to root_url
   end
 
   private
