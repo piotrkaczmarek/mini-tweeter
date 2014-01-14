@@ -1,5 +1,6 @@
 class Micropost < ActiveRecord::Base
   belongs_to :user
+  belongs_to :organization
   has_many :rates, dependent: :destroy
   default_scope -> { order('created_at DESC') }
   before_validation :clear_rating

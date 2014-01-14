@@ -1,9 +1,9 @@
 Feature: managing organizations
-  As a organization member and tweet user
+  As a organization member and tweeter user
   So that I can tweet as a organization
   I want to manage organization
 
-Background: microposts and users in database
+Background: microposts, users and organizations in database
   Given the following users exist:
   | id | name | email            | organization_id |
   | 0  | John | john@example.com | 0               |

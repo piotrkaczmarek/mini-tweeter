@@ -360,19 +360,31 @@ describe OrganizationsController do
       @member2 = FactoryGirl.create(:user, organization_id: @organization.id)
       @not_member1 = FactoryGirl.create(:user, organization_id: @organization.id+1)
       @not_member2 = FactoryGirl.create(:user)
-      @member1.microposts.create(content: "post1")
-      @member1.microposts.create(content: "post2")
-      @member2.microposts.create(content: "post3")
+      
+      @member1.microposts.create(content: "post1", organization_id: @organization.id)
+      @member1.microposts.create(content: "post6", organization_id: @organization.id)
+      @member1.microposts.create(content: "post2", organization_id: (@organization.id+1))
+      @member2.microposts.create(content: "post3", organization_id: @organization.id)
       @not_member1.microposts.create(content: "post4")
-      @not_member2.microposts.create(content: "post5")
-
+      @not_member2.microposts.create(content: "post5", organization_id: @organization.id)
+ 
+      @users = [ @member1 , @member2, @not_member1, @not_member2 ]
+      @posts = []
+      @users.each do |user|
+        user.microposts.where(organization_id: @organization.id).each do | post |
+          @posts << post
+        end
+      end      
       get :show, { id: @organization.id, page: 1}
     end
     it "should show organization" do
       assigns(:organization).should == @organization
     end
     it "should have proper number of posts" do
-      assigns(:microposts).count.should == 3
+      assigns(:microposts).count.should == 4
+    end
+    it "should have proper posts" do
+      assigns(:microposts).should eq @posts.flatten.sort.reverse
     end
   end
 

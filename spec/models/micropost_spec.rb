@@ -12,6 +12,8 @@ describe Micropost do
 
     it { should respond_to(:content)}
     it { should respond_to(:user_id)}
+    it { should respond_to(:organization_id) }
+    it { should respond_to(:organization) }
     it { should respond_to(:user)}
     it { should respond_to(:rating)}
     it { should respond_to(:rated_by)}

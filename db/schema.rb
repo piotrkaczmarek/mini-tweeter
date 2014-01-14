@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140110205551) do
+ActiveRecord::Schema.define(version: 20140114204049) do
 
   create_table "microposts", force: true do |t|
     t.string   "content"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20140110205551) do
     t.float    "rating"
     t.integer  "rated_by"
     t.integer  "answer_to_id"
+    t.integer  "organization_id"
   end
 
   add_index "microposts", ["user_id", "created_at"], name: "index_microposts_on_user_id_and_created_at"

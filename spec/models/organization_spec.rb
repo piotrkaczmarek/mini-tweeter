@@ -48,13 +48,13 @@ describe Organization do
 
     describe "#microposts" do
       before do
-        user.microposts.create(content: "post1")
+        user.microposts.create(content: "post1", organization_id: organization.id)
         user.microposts.create(content: "post2")
         @user2 = FactoryGirl.create(:user, organization_id: organization.id )
-        @user2.microposts.create(content: "post3")
+        @user2.microposts.create(content: "post3", organization_id: organization.id)
  
-        @user_microposts = user.microposts.all
-        @user2_microposts = @user2.microposts.all
+        @user_microposts = user.microposts.find_by_organization_id(organization.id)
+        @user2_microposts = @user2.microposts.find_by_organization_id(organization.id)
       end
       its(:microposts) { should eq [@user_microposts, @user2_microposts].flatten.sort.reverse }
     end
