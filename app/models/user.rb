@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
   has_many :microposts, dependent: :destroy
   belongs_to :organization
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-  has_many :followed_users, through: :relationships, source: :followed
-  has_many :reverse_relationships, foreign_key: "followed_id",
+  has_many :followed_users, through: :relationships, source: :followed_user
+  has_many :reverse_relationships, foreign_key: "followed_user_id",
                                    class_name: "Relationship",
                                    dependent: :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
@@ -29,15 +29,15 @@ class User < ActiveRecord::Base
   end
 
   def following?(other_user)
-    relationships.find_by(followed_id: other_user.id)
+    relationships.find_by(followed_user_id: other_user.id)
   end
 
   def follow!(other_user)
-    relationships.create!(followed_id: other_user.id)
+    relationships.create!(followed_user_id: other_user.id)
   end
 
   def unfollow!(other_user)
-    relationships.find_by(followed_id: other_user.id).destroy!
+    relationships.find_by(followed_user_id: other_user.id).destroy!
   end
 
   def disable_password_validation
