@@ -15,10 +15,12 @@ module NavigationHelpers
 
     when /^the home\s?page$/
       '/'
-
+    when /^the organization (.+) members site$/
+      "/organizations/#{Organization.find_by_name($1).id}/list_members"
     when /(\w+)'s user page$/
       "/users/#{User.find_by_name($1).id}"
-
+    when /http:\/\/(.+)/
+      "http://#{$1}"
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

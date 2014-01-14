@@ -16,6 +16,7 @@ describe Organization do
     it { should respond_to(:homesite_url) }
     it { should respond_to(:admin_id) }
     it { should respond_to(:members) }
+    it { should respond_to(:microposts) }
 
     it { should be_valid }
 
@@ -43,6 +44,19 @@ describe Organization do
         @user2 = FactoryGirl.create(:user, {organization_id: organization.id} )
       end
       its(:members) { should eq [user, @user2] }
+    end
+
+    describe "#microposts" do
+      before do
+        user.microposts.create(content: "post1")
+        user.microposts.create(content: "post2")
+        @user2 = FactoryGirl.create(:user, organization_id: organization.id )
+        @user2.microposts.create(content: "post3")
+ 
+        @user_microposts = user.microposts.all
+        @user2_microposts = @user2.microposts.all
+      end
+      its(:microposts) { should eq [@user_microposts, @user2_microposts].flatten.sort.reverse }
     end
   end
 

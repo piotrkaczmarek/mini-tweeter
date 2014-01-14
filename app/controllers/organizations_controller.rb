@@ -4,22 +4,21 @@ class OrganizationsController < ApplicationController
 
   def index
     @organizations = Organization.paginate(page: params[:page])
+    render 'index'
+  end
+  
+  def new
+    @organization = Organization.new(admin_id: current_user.id)
   end
 
   def show
     @organization = Organization.find(params[:id])
-    @members = @organization.members.paginate(page: params[:page])
-    @microposts = []
-    @members.each do |member|
-      member.microposts.each do |post|
-        @microposts << post
-      end
-    end
+    @microposts = @organization.microposts.paginate(page: params[:page])
     render 'show'
   end
 
   def list_members
-    @organization = Organization.find(params[:id])
+    @organization = Organization.find(params[:id]) unless @organization
     @members = @organization.members.paginate(page: params[:page])
     @admin = User.find(@organization.admin_id)
     render 'list_members'
@@ -34,7 +33,7 @@ class OrganizationsController < ApplicationController
       @user.disable_password_validation
       @user.save!
       flash[:success] = "#{@organization.name} successfully created!"
-      redirect_to root_url
+      index
     else
       render 'new'
     end
@@ -76,14 +75,18 @@ class OrganizationsController < ApplicationController
     if (member_id == @current_user.id.to_s or @current_user.id == @organization.admin_id)
       if member_id == @organization.admin_id.to_s
         flash[:error] = "You cannot remove organization admin. Change admin first or delete organization."
+        redirect_to list_members_organization_url  
       else
         @member = User.find(member_id)
         @member.organization_id = nil
         @member.disable_password_validation
-        @member.save!        
+        @member.save!
+        flash[:success] = "#{@member.name} removed from #{@organization.name}"
+        redirect_to list_members_organization_url   
       end
+    else
+      redirect_to root_url
     end
-    redirect_to root_url
   end
 
   def change_admin

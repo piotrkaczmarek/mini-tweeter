@@ -138,6 +138,14 @@ Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
   end
 end
 
+Then /^I should see "([^"]*)" button/ do |name|
+  should have_button name
+end
+
+Then /^I should not see "([^"]*)" button/ do |name|
+  should have_no_button name
+end
+
 Then /^the "([^"]*)" field(?: within (.*))? should contain "([^"]*)"$/ do |field, parent, value|
   with_scope(parent) do
     field = find_field(field)

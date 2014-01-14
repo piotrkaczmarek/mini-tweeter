@@ -12,7 +12,12 @@
     </section>
   </aside>
   <div class="span8">
-    <%= render 'follow_form' if signed_in? %>
+    <% unless current_user?(@user) %>
+      <div class="row">
+        <%= render 'follow_form' if signed_in? %>
+        <%= render 'invite_form' if can_invite_user? %>
+      </div>
+     <% end %>
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
       <ol class="microposts">

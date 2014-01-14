@@ -43,4 +43,16 @@ module SessionsHelper
     session[:return_to] = request.url if request.get?
   end
 
+  def organization_admined_by(user)
+    begin
+      return Organization.find_by_admin_id(user.id)
+    rescue
+      return nil
+    end
+  end
+
+  def can_invite_user?
+    @org_admined_by_current_user and (@user.organization_id == @org_admined_by_current_user.id or !@user.organization_id)
+  end
+
 end

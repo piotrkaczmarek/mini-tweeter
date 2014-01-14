@@ -1,0 +1,9 @@
+<li id="<%="member_#{member.id}"%>">
+  <%= link_to member.name, member %>
+  <% if current_user.id == @organization.admin_id  %>
+    | <%= link_to "remove",  { controller: :organizations, action: :remove_member,
+             member_id: member.id, id: @organization.id },
+                                  method: :post,
+                                  data: { confirm: "Are you sure?" } %>
+  <% end %>
+</li>

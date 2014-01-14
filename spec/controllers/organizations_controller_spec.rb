@@ -371,9 +371,6 @@ describe OrganizationsController do
     it "should show organization" do
       assigns(:organization).should == @organization
     end
-    it "should show only members" do
-      assigns(:members).should == [@member1, @member2]
-    end
     it "should have proper number of posts" do
       assigns(:microposts).count.should == 3
     end

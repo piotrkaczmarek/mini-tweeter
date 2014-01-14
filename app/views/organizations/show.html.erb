@@ -3,21 +3,24 @@
   <aside class="span4">
     <section>
       <h1>
-        <%= @organization.name %>
+        <% if @organization.homesite_url %>
+          <%= link_to @organization.name, "http://#{@organization.homesite_url}" %>
+        <% else %>
+          <%= @organization.name %>
+        <% end %>
       </h1>
     </section>
     <section>
-      <%=#todo add org stats render 'shared/stats' %>
+      <%= link_to "Members", list_members_organization_path %>
     </section>
   </aside>
   <div class="span8">
-    <%=# render 'follow_form' if signed_in? %>
     <% if @microposts.any? %>
       <h3>Microposts (<%= @microposts.count %>)</h3>
       <ol class="microposts">
-        <%= render @microposts %>
+        <%= render partial: 'shared/feed_item', collection: @microposts %>
       </ol>
-      <%= will_paginate @microposts %>
+      <%= will_paginate @microposts  %>
     <% end %>
   </div>
 </div>

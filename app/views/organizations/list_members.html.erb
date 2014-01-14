@@ -1,23 +1,6 @@
-<% provide(:title,@organization.name) %>
-<div class="row">
-  <aside class="span4">
-    <section>
-      <h1>
-        <%= @organization.name %>
-      </h1>
-    </section>
-    <section>
-      <%=#todo add org stats render 'shared/stats' %>
-    </section>
-  </aside>
-  <div class="span8">
-    <%=# render 'follow_form' if signed_in? %>
-    <% if @microposts.any? %>
-      <h3>Microposts (<%= @microposts.count %>)</h3>
-      <ol class="microposts">
-        <%= render @microposts %>
-      </ol>
-      <%= will_paginate @microposts %>
-    <% end %>
-  </div>
-</div>
+<% provide(:title, "#{@organization.name} members") %>
+<h1><%="#{@organization.name} members"%></h1>
+
+<ul class="users">
+      <%= render partial: 'member', collection: @members %>
+</ul>

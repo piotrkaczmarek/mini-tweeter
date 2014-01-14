@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @org_admined_by_current_user = organization_admined_by(current_user)
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
   end

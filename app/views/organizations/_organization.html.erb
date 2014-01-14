@@ -1,0 +1,5 @@
+<li>
+  <%= link_to organization.name, organization %>
+  has <%= pluralize(organization.microposts.count,"microposts")%> by
+  <%= pluralize(organization.members.count,"member") %>
+</li>

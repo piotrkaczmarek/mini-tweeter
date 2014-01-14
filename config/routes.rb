@@ -11,7 +11,7 @@ TutorialApp::Application.routes.draw do
       post :answer
     end
   end
-  resources :organizations, only: [:show, :index,:create, :update, :destroy] do
+  resources :organizations do
     member do
       post :add_member
       post :remove_member
