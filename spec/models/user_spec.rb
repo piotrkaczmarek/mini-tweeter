@@ -17,6 +17,7 @@ describe User do
   it { should respond_to(:feed) }
   it { should respond_to(:relationships) }
   it { should respond_to(:followed_users)}
+  it { should respond_to(:followed_organizations) }
   it { should respond_to(:following?) }
   it { should respond_to(:follow!) }
   it { should respond_to(:unfollow!) }
@@ -174,7 +175,7 @@ describe User do
     end
   end
 
-  describe "following" do
+  describe "following other users" do
     let(:other_user) { FactoryGirl.create(:user) }
     before do
       @user.save
@@ -195,6 +196,34 @@ describe User do
       it { should_not be_following(other_user) }
       its(:followed_users) { should_not include(other_user) }
     end
+  end
+
+  describe "following organizations" do
+    before do
+      @organization_admin = FactoryGirl.create(:user)
+      @organization = Organization.create(name: "Org1", admin_id: @organization_admin.id) 
+      @organization_admin.organization_id = @organization.id
+      @organization_admin.save!
+      @user.save
+      @user.follow!(@organization)
+    end
+
+    it { should be_following(@organization) }
+    its(:followed_organizations) { should include(@organization) }
+
+    describe "followed organization" do
+      subject { @organization }
+      its(:followers) { should include(@user) }
+    end
+    
+    describe "and unfollowing" do
+      before { @user.unfollow!(@organization) }
+
+      it { should_not be_following(@organization) }
+      its(:followed_organizations) { should_not include(@organization) }
+    end
+
+
   end
 
   describe "organization" do

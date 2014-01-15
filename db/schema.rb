@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140114213347) do
+ActiveRecord::Schema.define(version: 20140114233500) do
 
   create_table "microposts", force: true do |t|
     t.string   "content"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20140114213347) do
     t.integer  "followed_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "followed_organization_id"
   end
 
   add_index "relationships", ["followed_user_id"], name: "index_relationships_on_followed_user_id"
