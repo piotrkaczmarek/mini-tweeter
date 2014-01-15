@@ -175,6 +175,36 @@ describe User do
     end
   end
 
+  describe "#feed" do
+    describe "when user follows other user and organization" do
+      before do
+        @user1 = FactoryGirl.create(:user)
+        @user2 = FactoryGirl.create(:user)
+        @user.save
+      
+        @organization = Organization.create(name: "Org1", admin_id: @user2.id)
+        @user2.organization_id = @organization.id
+        @user2.save
+
+        @post1 = FactoryGirl.create(:micropost, user: @user1, created_at: 1.day.ago)
+        @post2 = FactoryGirl.create(:micropost, user: @user2, organization_id: @organization.id, created_at: 1.hour.ago)
+        @post3 = FactoryGirl.create(:micropost, user: @user, created_at: 2.hours.ago)
+        @post4 = FactoryGirl.create(:micropost, user: @user2)
+        
+        @user.follow!(@user1)
+        @user.follow!(@organization)
+      end
+      subject { @user }
+      its(:feed) { should include(@post1) }
+      its(:feed) { should include(@post2) }
+      its(:feed) { should include(@post3) }
+      its(:feed) { should_not include(@post4) }
+
+    end
+
+  end
+
+
   describe "following other users" do
     let(:other_user) { FactoryGirl.create(:user) }
     before do
