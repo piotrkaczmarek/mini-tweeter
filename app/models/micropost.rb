@@ -9,10 +9,10 @@ class Micropost < ActiveRecord::Base
   validates :rating, inclusion: { in: 0.0..5.0}, allow_nil: true
   validates :rated_by, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  def self.from_users_followed_by(user)
-    followed_user_ids = "SELECT followed_user_id FROM relationships
+  def self.from_users_and_organizations_followed_by(user)
+    followed_ids = "SELECT followed_user_id followed_organization_id FROM relationships
                          WHERE follower_id = :user_id"
-    where("user_id IN (#{followed_user_ids}) OR user_id = :user_id",
+    where("user_id IN (#{followed_ids}) OR user_id = :user_id",
            user_id: user.id)
   end
 
