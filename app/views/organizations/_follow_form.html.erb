@@ -1,0 +1,7 @@
+  <div class="span2" id="follow_form">
+    <% if current_user.following?(@organization) %>
+      <%= render 'unfollow' %>
+    <% else %>
+      <%= render 'follow' %>
+    <% end %>
+  </div>

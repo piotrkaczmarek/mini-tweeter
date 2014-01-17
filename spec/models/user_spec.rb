@@ -199,6 +199,7 @@ describe User do
       its(:feed) { should include(@post2) }
       its(:feed) { should include(@post3) }
       its(:feed) { should_not include(@post4) }
+      its(:feed) { should eq [@post2, @post3, @post1] }
 
     end
 

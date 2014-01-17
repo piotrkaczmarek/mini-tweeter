@@ -17,6 +17,7 @@ TutorialApp::Application.routes.draw do
       post :remove_member
       post :change_admin
       get :list_members
+      get :followers
     end
   end
 

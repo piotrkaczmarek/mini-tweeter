@@ -14,7 +14,6 @@ class Micropost < ActiveRecord::Base
                          WHERE follower_id = :user_id"
     followed_organizations_ids = "SELECT followed_organization_id FROM relationships
                                   WHERE follower_id = :user_id"
-
     where("user_id IN (#{followed_users_ids}) OR organization_id IN (#{followed_organizations_ids}) OR user_id = :user_id",
            user_id: user.id)
   end

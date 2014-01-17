@@ -1,0 +1,5 @@
+<%= form_for(current_user.relationships.build(followed_organization_id: @organization.id),
+             remote: true) do |f| %>
+  <div><%= f.hidden_field :followed_organization_id %></div>
+  <%= f.submit "Follow", class: "btn btn-large btn-primary" %>
+<% end %>

@@ -100,6 +100,14 @@ class OrganizationsController < ApplicationController
       redirect_to root_url
     end
   end
+
+  def followers
+    @title = "Followers"
+    @organization = Organization.find(params[:id])
+    @users = @organization.followers.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
   private
     def organization_admin
       @organization = Organization.find(params[:id])
