@@ -33,7 +33,9 @@ Background: microposts, users and organizations in database
     Then I should be on the organizations page
     And I should see "Corpo"
     And I follow "Corpo"
+    And I follow "Members"
     Then I should see "John"
+    And I should be following organization Corpo
  
 
   Scenario: viewing organizations list

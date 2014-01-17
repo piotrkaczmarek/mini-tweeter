@@ -3,7 +3,12 @@
     <%= link_to gravatar, feed_item.user %>
   <% end %>
     <span class="user">
+      <% if feed_item.organization %>
+        <%= link_to feed_item.organization.name, feed_item.organization %>
+        (
+      <% end %>
       <%= link_to feed_item.user.name, feed_item.user %>
+      <%= ")" if feed_item.organization %>
     </span>
     <%= render 'shared/micropost_body', micropost: feed_item %>
 </li>

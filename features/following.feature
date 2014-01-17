@@ -13,10 +13,12 @@ Background: microposts, users and organizations in database
   | 4  | Ann  | a@exasgf.sfst    | nil             |
 
   Given the following microposts exist:
-  | id | content      | rated_by | rating | user |
-  | 0  | mine       | 0        | 0.0    | John | 
-  | 1  | "bobs_text"  | 2        | 4.0    | Bob  |
-  | 2  | pauls_post   | 0        | 0.0    | Paul |
+  | id | content      | rated_by | rating | user | organization_id |
+  | 0  | mine         | 0        | 0.0    | John | nil             |
+  | 1  | "bobs_text"  | 2        | 4.0    | Bob  | nil             |
+  | 2  | pauls_post   | 0        | 0.0    | Paul | nil             |
+  | 3  | orgs2_post   | 0        | 0.0    | Paul | 1               |
+  | 4  | anns         | 5        | 3.0    | Ann  | nil             |         
 
   Given the following organizations exist:
   | id  | name | homesite_url | admin_id |
@@ -48,17 +50,26 @@ Scenario: unfollowing user
   
   
 Scenario: following organization
-  Given I am on Org1's organization page
+  Given I am on Org2's organization page
   And I press "Follow"
   And I am on the home page
-  Then I should see "org1_post"
+  Then I should see "orgs2_post"
+  And I should not see "pauls_post"
 
 Scenario: unfollowing organization
-  Given I follow organization Org1
-  And I am on Org1's organization page
+  Given I follow organization Org2
+  And I am on the home page
+  Then I should see "orgs2_post"
+  Then I am on Org2's organization page
   And I press "Unfollow"
   And I am on the home page
-  Then I should not see "org1_post"
+  Then I should not see "orgs2_post"
 
 
 Scenario: following organizations and users
+  Given I follow Ann
+  And I follow organization Org2
+  And I am on the home page
+  Then I should see "orgs2_post"
+  And I should see "anns"
+  And I should see "mine"

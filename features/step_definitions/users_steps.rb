@@ -7,6 +7,15 @@ Given /^I am logged in as (\w+)$/ do |user_name|
   expect(page).to have_link('Sign out', href: signout_path)
 end
 
+Given /^I log in as (\w+)$/ do |user_name|
+  visit signin_path
+  @user = User.find_by_name(user_name)
+  fill_in "Email",    with: @user.email
+  fill_in "Password", with: "password"
+  click_button "Sign in"
+  expect(page).to have_link('Sign out', href: signout_path)
+end
+
 Given /the following users exist/ do |users_table|
   users_table.hashes.each do |user|
     # each returned element will be a hash whose key is the table header.

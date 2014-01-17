@@ -19,7 +19,8 @@
          </div>
          <div class="row timestamp">
            <div class="span8">
-             <%= "Posted by #{original_post.user.name}" %>
+             Posted by 
+             <%= link_to original_post.user.name, original_post.user %> 
              <%= "#{time_ago_in_words(original_post.created_at)} ago." %>
            </div>
          </div>

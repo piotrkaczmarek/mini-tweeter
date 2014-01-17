@@ -16,6 +16,14 @@ Given /^I remove (.+)$/ do |member|
   with_scope ("li#member_#{member.id}") do
     click_link("remove") 
   end
-
 end
 
+Given /^I follow organization (\w+)$/ do |organization_name|
+  followed =  Organization.find_by_name(organization_name)
+  @user.follow!(followed)
+end
+
+Then /^I should be following organization (\w+)$/ do |organization_name|
+  organization = Organization.find_by_name(organization_name)
+  assert @user.following?(organization)
+end

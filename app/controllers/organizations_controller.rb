@@ -31,6 +31,7 @@ class OrganizationsController < ApplicationController
     if @organization.save
       @user.organization_id = @organization.id
       @user.disable_password_validation
+      @user.follow!(@organization)
       @user.save!
       flash[:success] = "#{@organization.name} successfully created!"
       index

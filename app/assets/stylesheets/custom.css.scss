@@ -194,13 +194,13 @@ input {
 .feed_item {
   margin: 0;
   padding: 0em;
-  background-color: $grayLighter;
+  background-color: $grayTimberwolf;
 }
 .micropost_body {
   list-style: none;
   margin: 0 0 2em 0;
 
-  background-color: $grayLighter;
+  background-color: $grayTimberwolf;
   .span1 {
   height: 0.05em;
   margin: 0 1em 0 0;
@@ -218,7 +218,7 @@ input {
 }
 .rate_now {
   display: block;
-  background-color: $grayLight;
+  background-color: $grayTimberwolf;
 }
 .rate_button {
   padding: 0.3em;
@@ -232,7 +232,7 @@ input {
 }
 .content {
   display: block;
-  background-color: $grayTimberwolf;
+  background-color: $grayLighter;
 }
 .timestamp {
   color: $grayLight;
