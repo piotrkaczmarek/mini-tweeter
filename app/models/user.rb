@@ -48,6 +48,29 @@ class User < ActiveRecord::Base
     relationships.find_by(hash).destroy!
   end
 
+  def add_to(organization)
+    begin
+      if organization
+        self.disable_password_validation
+        self.update_attributes(organization_id: organization.id)
+        self.follow!(organization)
+      else
+        false
+      end
+    rescue
+      false
+    end
+  end
+
+  def remove_from_organization
+    self.disable_password_validation
+    self.update_attributes(organization_id: nil)
+  end
+
+  def is_admin_of?(organization)
+    self.id == organization.admin_id
+  end
+
   def disable_password_validation
     @dont_validate_password = true
   end

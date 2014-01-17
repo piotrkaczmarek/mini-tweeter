@@ -30,22 +30,32 @@ describe OrganizationsController do
   describe "#destroy" do
     let(:organization) { Organization.create(name: "corpo", admin_id: user.id) }
     before :each do
-      user.organization_id = organization.id 
+      user.organization_id = organization.id
+      @follower = FactoryGirl.create(:user)
+      @follower.follow!(organization)
     end
     describe "when logged in as organization admin" do
       before do
         OrganizationsController.any_instance.stub(:current_user).and_return(user) 
         @user2 = FactoryGirl.create(:user, organization_id: organization.id)
-        delete :destroy, { id: organization.id }
+        
       end
       it "should decrease organization count" do
+        delete :destroy, { id: organization.id }
         expect(Organization.count).to eq 0
       end
       it "should delete user's organization_id" do
+        delete :destroy, { id: organization.id }
         expect(User.find(user.id).organization_id).to eq nil
       end
       it "should delete other members' organization_id" do
+        delete :destroy, { id: organization.id }
         expect(User.find(@user2.id).organization_id).to eq nil
+      end
+      it "should decrease relationships count" do
+        expect do
+          delete :destroy, { id: organization.id }
+        end.to change(Relationship, :count).by(-1)
       end
     end
 

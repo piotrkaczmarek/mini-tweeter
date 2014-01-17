@@ -53,7 +53,8 @@ Scenario: following organization
   Given I am on Org2's organization page
   And I press "Follow"
   And I am on the home page
-  Then I should see "orgs2_post"
+  Then I should be following organization Org2
+  And I should see "orgs2_post"
   And I should not see "pauls_post"
 
 Scenario: unfollowing organization
@@ -70,6 +71,7 @@ Scenario: following organizations and users
   Given I follow Ann
   And I follow organization Org2
   And I am on the home page
-  Then I should see "orgs2_post"
+  Then I should be following organization Org2
+  And I should see "orgs2_post"
   And I should see "anns"
   And I should see "mine"

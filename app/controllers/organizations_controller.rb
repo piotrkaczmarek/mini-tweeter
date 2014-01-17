@@ -29,16 +29,14 @@ class OrganizationsController < ApplicationController
     @user = current_user
     @organization.admin_id = @user.id
     if @organization.save
-      @user.organization_id = @organization.id
-      @user.disable_password_validation
-      @user.follow!(@organization)
-      @user.save!
+      @user.add_to(@organization)
       flash[:success] = "#{@organization.name} successfully created!"
       index
     else
       render 'new'
     end
   end
+
   def update 
     if @organization.update_attributes(organization_params)
       flash[:success] = "Organization profile updated"
@@ -47,11 +45,10 @@ class OrganizationsController < ApplicationController
       render 'edit'
     end
   end
+
   def destroy
     @organization.members.each do |member| 
-      member.organization_id = nil
-      member.disable_password_validation
-      member.save!
+      member.remove_from_organization
     end
     @organization.destroy
     redirect_to root_url
@@ -60,7 +57,7 @@ class OrganizationsController < ApplicationController
   def add_member
     @new_member = User.find(params.require(:new_member_id))
     @new_member.disable_password_validation
-    if @new_member.update_attributes(organization_id: @organization.id)
+    if @new_member.add_to(@organization)
       flash[:success] = "#{@new_member.name} added to #{@organization.name} successfully!"
     else
       flash[:error] = "Adding new member failed!"
@@ -73,21 +70,16 @@ class OrganizationsController < ApplicationController
     @current_user = current_user
     member_id = params.require(:member_id)
 
-    if (member_id == @current_user.id.to_s or @current_user.id == @organization.admin_id)
-      if member_id == @organization.admin_id.to_s
-        flash[:error] = "You cannot remove organization admin. Change admin first or delete organization."
-        redirect_to list_members_organization_url  
+    if allowed_to_manage_member?(member_id)
+      if member_is_admin?(member_id)
+        flash[:error] = "You cannot remove organization admin. Change admin first or delete organization." 
       else
         @member = User.find(member_id)
-        @member.organization_id = nil
-        @member.disable_password_validation
-        @member.save!
+        @member.remove_from_organization
         flash[:success] = "#{@member.name} removed from #{@organization.name}"
-        redirect_to list_members_organization_url   
       end
-    else
-      redirect_to root_url
     end
+    redirect_to list_members_organization_url
   end
 
   def change_admin
@@ -124,5 +116,13 @@ class OrganizationsController < ApplicationController
       redirect_to root_url unless @new_admin = User.find_by_id(params.require(:new_admin_id))
       @new_admin
     end
+
+     def allowed_to_manage_member?(member_id)
+       (member_id == @current_user.id.to_s or @current_user.is_admin_of?(@organization))
+     end
+
+     def member_is_admin?(member_id)
+       member_id == @organization.admin_id.to_s
+     end
 
 end

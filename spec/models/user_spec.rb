@@ -23,6 +23,8 @@ describe User do
   it { should respond_to(:unfollow!) }
   it { should respond_to(:remember_token)}
   it { should respond_to(:organization)}
+  it { should respond_to(:add_to)}
+  it { should respond_to(:is_admin_of?)}
 
   it { should be_valid }
   it { should_not be_admin }
@@ -200,11 +202,85 @@ describe User do
       its(:feed) { should include(@post3) }
       its(:feed) { should_not include(@post4) }
       its(:feed) { should eq [@post2, @post3, @post1] }
-
     end
+  end
+  describe "#add_to_organization" do
+    before do
+      @user1 = FactoryGirl.create(:user)
+    end
+
+    describe "when organization exists" do
+      before do
+        @user2 = FactoryGirl.create(:user)
+        @organization = Organization.create(name: "Org1", admin_id: @user2.id)
+      end
+      it "should set organization id" do
+        @user1.add_to(@organization)
+        expect(@user1.organization_id).to eq @organization.id
+      end
+    end
+
+    describe "when organization doesn't exist" do
+      it "should not change organization id" do
+        @user1.add_to(nil)
+        expect(@user1.organization_id).to eq nil
+      end
+    end
+  describe "#is_admin_of?" do
+
+    describe "user is the admin of organization" do
+      before do
+        @user1 = FactoryGirl.create(:user)
+        @organization = Organization.create(name: "Org1", admin_id: @user1.id)
+        @user1.add_to(@organization)
+      end
+      it "should return true" do
+        expect(@user1.is_admin_of?(@organization)).to eq true
+      end
+    end
+    
+    describe "when user is not the admin of organization" do
+      before do
+        @user1 = FactoryGirl.create(:user)
+        @user2 = FactoryGirl.create(:user)
+        @organization = Organization.create(name: "Org1", admin_id: @user2.id)
+      end
+      it "should return false" do
+        expect(@user1.is_admin_of?(@organization)).to eq false
+      end
+    end
+  
+    describe "when user is an admin of different organization" do
+      before do
+        @user1 = FactoryGirl.create(:user)
+        @user2 = FactoryGirl.create(:user)
+        @organization1 = Organization.create(name: "Org1", admin_id: @user1.id)
+        @organization2 = Organization.create(name: "Org1", admin_id: @user2.id)
+        @user1.add_to(@organization1)
+        @user2.add_to(@organization2)
+      end
+      it "should return false" do
+        expect(@user1.is_admin_of?(@organization2)).to eq false
+      end
+    end
+    
+    describe "when user is only a member of organization" do
+      before do
+        @user1 = FactoryGirl.create(:user)
+        @user2 = FactoryGirl.create(:user)
+        @organization2 = Organization.create(name: "Org1", admin_id: @user2.id)
+        @user1.add_to(@organization2)
+        @user2.add_to(@organization2)
+      end
+      it "should return false" do
+        expect(@user1.is_admin_of?(@organization2)).to eq false
+      end
+    end
+
 
   end
 
+  end
 
   describe "following other users" do
     let(:other_user) { FactoryGirl.create(:user) }
