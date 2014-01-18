@@ -1,9 +1,28 @@
 <li id="<%="member_#{member.id}"%>">
   <%= link_to member.name, member %>
-  <% if current_user.id == @organization.admin_id  %>
-    | <%= link_to "remove",  { controller: :organizations, action: :remove_member,
-             member_id: member.id, id: @organization.id },
-                                  method: :post,
-                                  data: { confirm: "Are you sure?" } %>
+  <% remove_link_label = "remove" %>
+  <%if member.id == current_user.id %>
+    (you)
+    <% remove_link_label = "leave" %>
   <% end %>
+  <%= "(admin)" if member.id == @organization.admin_id %>
+  <% if current_user.id == @organization.admin_id or member.id == current_user.id %>
+    | 
+    <%= link_to remove_link_label,  { controller: :organizations,
+                               action: :remove_member,
+                               member_id: member.id,
+                               id: @organization.id },
+                             method: :post,
+                             data: { confirm: "Are you sure you want to remove #{member.name} from #{@organization.name}?" } %>
+  <% end %>
+  <% if current_user.id == @organization.admin_id and not member.id == @current_user.id %>
+    | 
+    <%= link_to "give admin rights", { controller: :organizations,
+                                        action: :change_admin,
+                                        new_admin_id: member.id,
+                                        id: @organization.id },
+                                      method: :post,
+                                      data: { confirm: "Are you sure you want to give admin rights to #{member.name}? You will loose yours admin rights!"} %>
+  <% end %>
+
 </li>

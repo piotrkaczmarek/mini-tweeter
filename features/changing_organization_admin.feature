@@ -21,3 +21,12 @@ Background: microposts, users and organizations in database
   | 0   | Org1 | org1.com     | 0        |
   | 1   | Org2 | org2.com     | 1        |
 
+Scenario: changing admin
+  Given I am logged in as Bob
+  And I am on the Org2's members page
+  Then I should see "give admin rights"
+  And I should see "remove"
+  And I follow "give admin rights"
+  Then I should be on the Org2's members page
+  And I should not see "remove"
+

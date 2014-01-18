@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :signed_in_user
-  before_action :organization_admin, only: [:destroy, :update, :add_member, :change_admin]
+  before_action :organization_admin, only: [:destroy, :edit,:update, :add_member, :change_admin]
 
   def index
     @organizations = Organization.paginate(page: params[:page])
@@ -9,6 +9,9 @@ class OrganizationsController < ApplicationController
   
   def new
     @organization = Organization.new(admin_id: current_user.id)
+  end
+
+  def edit
   end
 
   def show
@@ -40,7 +43,7 @@ class OrganizationsController < ApplicationController
   def update 
     if @organization.update_attributes(organization_params)
       flash[:success] = "Organization profile updated"
-      redirect_to root_url
+      redirect_to organization_url
     else
       render 'edit'
     end
@@ -62,7 +65,7 @@ class OrganizationsController < ApplicationController
     else
       flash[:error] = "Adding new member failed!"
     end
-    redirect_to root_url
+    redirect_to list_members_organization_url
   end
 
   def remove_member
@@ -90,8 +93,8 @@ class OrganizationsController < ApplicationController
       else
         flash[:error] = "Can't change admin to user that is not a member of organization. Invite him first."
       end
-      redirect_to root_url
     end
+    redirect_to list_members_organization_url
   end
 
   def followers

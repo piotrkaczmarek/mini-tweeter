@@ -2,24 +2,32 @@
 <div class="row">
   <aside class="span4">
     <section>
-      <h1>
-        <% if @organization.homesite_url %>
+      <h2>
+        <% if not @organization.homesite_url.empty? %>
           <%= link_to @organization.name, "http://#{@organization.homesite_url}" %>
         <% else %>
           <%= @organization.name %>
         <% end %>
-      </h1>
+      </h2>
     </section>
+    <% if current_user?(@organization.admin) %>
+      <section>
+      <%= link_to "Edit organization", edit_organization_path(@organization) %> 
+      </section>
+    <% end %>
     <section>
       <%= render 'stats' %>
     </section>
     <section>
-      <%= link_to "Members", list_members_organization_path %>
+      <div class="stats">
+        <%= link_to "#{@organization.members.count} members", list_members_organization_path %>
+      </div>
     </section>
   </aside>
   <div class="span8">
     <section>
       <%= render 'follow_form' if signed_in? %>
+      <%= render 'delete' if current_user?(@organization.admin) %>
     </section>
     <section>
       <% if @microposts.any? %>

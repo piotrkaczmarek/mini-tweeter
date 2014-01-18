@@ -1,0 +1,7 @@
+<%= button_to "DELETE",
+               { controller: :organizations, action: :destroy,
+                 id: @organization.id},
+               class: "btn btn-large btn-danger",
+               method: :delete,
+               data: { confirm: "Are you sure you want to delete #{@organization.name}?"}  %>
+

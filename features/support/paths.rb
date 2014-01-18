@@ -15,7 +15,7 @@ module NavigationHelpers
 
     when /^the home\s?page$/
       '/'
-    when /^the organization (.+) members site$/
+    when /^the (.+)'s members page$/
       "/organizations/#{Organization.find_by_name($1).id}/list_members"
     when /(\w+)'s user page$/
       "/users/#{User.find_by_name($1).id}"
