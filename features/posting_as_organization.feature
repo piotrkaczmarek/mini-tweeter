@@ -8,6 +8,8 @@ Background: microposts, users and organizations in database
   | id | name | email            | organization_id |
   | 0  | John | john@example.com | 0               |
   | 1  | Bob  | bob@example.com  | 1               |
+  | 2  | Ian  | ian@example.com  | 1               |
+  | 3  | Ann  | ann@example.com  | nil             |
 
   Given the following microposts exist:
   | id | content      | rated_by | rating | user | organization_id |
@@ -24,6 +26,7 @@ Scenario: post as organization
   Given I am logged in as John
   And I am on the home page
   Then I fill post content with "Johns org post"
+  Then I should see "Post as organization"
   And I check "micropost_organization_id"
   And I press "Post"
   Then I sign out
@@ -41,3 +44,13 @@ Scenario: organization post is marked as one
   And I follow organization Org2
   And I am on the home page
   Then I should see "Org2"
+
+Scenario: not being a member of organization
+  Given I am logged in as Ann
+  And I am on the home page
+  Then I should not see "Post as organization"
+
+Scenario: being a member of organization
+  Given I am logged in as Ian
+  And I am on the home page
+  Then I should see "Post as organization"

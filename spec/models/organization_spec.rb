@@ -43,7 +43,7 @@ describe Organization do
       before do
         @user2 = FactoryGirl.create(:user, {organization_id: organization.id} )
       end
-      its(:members) { should eq [user, @user2] }
+      its(:members) { should include(user, @user2) }
     end
 
     describe "#microposts" do

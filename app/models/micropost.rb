@@ -35,14 +35,14 @@ class Micropost < ActiveRecord::Base
     sum_score += score
 
     self.rating = sum_score/self.rated_by
-    return rate
+    self.save
   end
   def change_rate(user_id,score)
     sum_score = rates.sum(:score) 
     sum_score += score - @rate.score
     @rate.score = score
     self.rating = sum_score/rated_by
-    return @rate
+    self.save
   end
   def answer_to
     Micropost.find_by_id(self.answer_to_id)

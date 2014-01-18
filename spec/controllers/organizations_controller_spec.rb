@@ -413,7 +413,10 @@ describe OrganizationsController do
       assigns(:organization).should == @organization
     end
     it "should show only members" do
-      assigns(:members).should == [@member1, @member2]
+      assigns(:members).should include(@member1, @member2)
+    end
+    it "should not show not members" do
+      assigns(:members).should_not include(@not_member1, @not_member2)
     end
     it "should show admin" do
       assigns(:admin).should == @member1

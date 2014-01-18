@@ -16,8 +16,7 @@ class MicropostsController < ApplicationController
     @micropost = Micropost.find_by_id(params.require(:id))
     if @micropost
       user = current_user
-      @micropost.rate_it(user.id,params.require(:rate).to_f)
-      if @micropost.save
+      if @micropost.rate_it(user.id,params.require(:rate).to_f)
         flash[:success] = "You just gave this post #{params[:rate]} points!"
       else
         flash[:error] = "Rating failed!"

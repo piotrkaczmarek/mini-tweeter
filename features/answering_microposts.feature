@@ -23,9 +23,9 @@ Background: microposts and users in database
     Then I should see "@Bob: " within ".new_micropost"
     And I should see "Bob wrote " within ".new_micropost"
     And I press "Post"
-    And I should see "Answer to" within "div#micropost_2"
-    And I should see "Posted by Bob" within "div#micropost_2"
-    And I should see "bobs_text" within "div#micropost_2"
+    And I should see "Answer to"
+    And I should see "Posted by Bob"
+    And I should see "bobs_text"
   
   Scenario: deleting not answered post
     Given I am on the home page
