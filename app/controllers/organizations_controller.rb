@@ -93,8 +93,8 @@ class OrganizationsController < ApplicationController
       else
         flash[:error] = "Can't change admin to user that is not a member of organization. Invite him first."
       end
+      redirect_to list_members_organization_url
     end
-    redirect_to list_members_organization_url
   end
 
   def followers

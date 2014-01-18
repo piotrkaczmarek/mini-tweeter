@@ -3,7 +3,7 @@
   <aside class="span4">
     <section>
       <h2>
-        <% if not @organization.homesite_url.empty? %>
+        <% if @organization.homesite_url and  not @organization.homesite_url.empty? %>
           <%= link_to @organization.name, "http://#{@organization.homesite_url}" %>
         <% else %>
           <%= @organization.name %>

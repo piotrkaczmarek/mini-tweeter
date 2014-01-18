@@ -33,7 +33,7 @@ Background: microposts, users and organizations in database
     Then I should be on the organizations page
     And I should see "Corpo"
     And I follow "Corpo"
-    And I follow "Members"
+    And I follow "members"
     Then I should see "John"
     And I should be following organization Corpo
  
@@ -46,7 +46,7 @@ Background: microposts, users and organizations in database
   Scenario: viewing members list
     Given I am on the organizations page
     And I follow "Org2"
-    And I follow "Members"
+    And I follow "members"
     Then I should see "Bob"
     And I should see "Paul"
     And I should not see "John"
@@ -54,23 +54,23 @@ Background: microposts, users and organizations in database
   Scenario: removing member from members list
     Given I am on the organizations page
     And I follow "Org1"
-    And I follow "Members"
+    And I follow "members"
     Then I follow "remove" within "li#member_3"
     Then I should see "Ian removed from Org1"
-    And I should be on the organization Org1 members site
+    And I should be on the Org1's members page
 
   Scenario: removing member from user page
     Given I am on Ian's user page
     And I press "Uninvite from Org1"
     Then I should see "Ian removed from Org1"
-    And I go to the organization Org1 members site
+    And I go to the Org1's members page
     Then I should not see "Ian"
 
   Scenario: adding member
     Given I am on Ann's user page
     And I press "Invite to Org1"
     Then I should see "Ann added to Org1 successfully!"
-    And I go to the organization Org1 members site
+    And I go to the Org1's members page
     Then I should see "Ann"
 
   Scenario: trying to add member of another organization
