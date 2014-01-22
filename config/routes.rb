@@ -1,5 +1,6 @@
 TutorialApp::Application.routes.draw do
 
+  get "password_resets/new"
   resources :users do
     member do
       get :following, :followers
@@ -21,7 +22,7 @@ TutorialApp::Application.routes.draw do
     end
   end
 
-
+  resources :password_resets, only: [:new, :create, :edit, :update]
   resources :sessions, only: [:new, :create, :destroy]
   resources :relationships, only: [:create, :destroy]
   root 'static_pages#home'

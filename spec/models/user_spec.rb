@@ -353,5 +353,20 @@ describe User do
  
   end
 
+  describe "#send_password_reset" do
+    it "sends and email" do
+      @user.send_password_reset
+      ActionMailer::Base.deliveries.last.to.should == [@user.email]
+    end
+    it "should set password_reset_token" do
+      @user.send_password_reset
+      expect(@user.password_reset_token).to_not eq nil
+    end
+    it "should set password_reset_at" do
+      @user.send_password_reset
+      expect(@user.password_reset_sent_at).to_not eq nil
+    end
+
+  end
  
 end

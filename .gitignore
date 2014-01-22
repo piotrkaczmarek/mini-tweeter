@@ -10,6 +10,9 @@
 /log/*.log
 /tmp
 
+# Ignore environment config files with mail passwords
+/config/environments/*.rb
+
 # Ignore other unneeded files.
 database.yml
 doc/

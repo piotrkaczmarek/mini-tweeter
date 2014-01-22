@@ -79,4 +79,12 @@ private
     def admin_user
       redirect_to(root_url) unless current_user.admin?
     end
+
+    def organization_admined_by(user)
+      begin
+        return Organization.find_by_admin_id(user.id)
+      rescue
+        return nil
+      end
+    end
 end
