@@ -10,9 +10,6 @@
 /log/*.log
 /tmp
 
-# Ignore environment config files with mail passwords
-/config/environments/*.rb
-
 # Ignore other unneeded files.
 database.yml
 doc/
@@ -43,3 +40,6 @@ pickle-email-*.html
 .project
 config/initializers/secret_token.rb
 >>>>>>> a120c9dfbc1c82eeefb52f58ddbbd872750f6f13
+
+# Ignore application configuration
+/config/application.yml
