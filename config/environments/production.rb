@@ -4,6 +4,17 @@ TutorialApp::Application.configure do
 
   config.action_mailer.default_url_options = { host: "https://stormy-basin-6775.herokuapp.com" }
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               "gmail.com",
+    user_name:            ENV["MAILER_MAIL_ADDRESS"],
+    password:             ENV["MAILER_PASSWORD"],
+    authentication:       'plain',
+    enable_starttls_auto: true  }
+
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 
