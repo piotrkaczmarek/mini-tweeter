@@ -25,6 +25,7 @@ describe User do
   it { should respond_to(:organization)}
   it { should respond_to(:add_to)}
   it { should respond_to(:is_admin_of?)}
+  it { should respond_to(:invitations) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -353,6 +354,31 @@ describe User do
  
   end
 
+  describe "invitations" do
+    
+    describe "when invited by two organizations" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      let(:organization) { Organization.create(name: "org1", admin_id: other_user.id) }
+      let(:other_user2) { FactoryGirl.create(:user) }
+      let(:organization2) { Organization.create(name: "org2", admin_id: other_user2.id) }
+      before do
+        @user.save
+        organization.invite @user
+        organization2.invite @user
+      end
+ 
+      it "should have two invitations" do
+        expect(User.find(@user.id).invitations.count).to eq 2
+      end
+      it "should have two organizations_that invited" do
+        expect(User.find(@user.id).organizations_that_invited.count).to eq 2
+      end
+      it "should have proper organizations that invited" do
+        expect(User.find(@user.id).organizations_that_invited).to include(organization, organization2)
+      end
+
+    end
+  end
   describe "#send_password_reset" do
     it "sends and email" do
       @user.send_password_reset

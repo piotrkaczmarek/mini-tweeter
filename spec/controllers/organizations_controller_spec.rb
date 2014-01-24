@@ -182,7 +182,7 @@ describe OrganizationsController do
         end
         it "should have correct members" do
           post :add_member, {id: organization.id, new_member_id: @user.id }
-          expect(organization.members).to eq [user, @user]
+          expect(organization.members).to include(user, @user)
         end
       end
 
@@ -198,7 +198,7 @@ describe OrganizationsController do
         end
         it "should have correct members" do
           post :add_member, {id: organization.id, new_member_id: @user.id }
-          expect(organization.members).to eq [user, @user]
+          expect(organization.members).to include(user, @user)
         end
       end
     end

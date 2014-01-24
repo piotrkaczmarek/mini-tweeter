@@ -1,6 +1,16 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
       <%= link_to "Mini-tweeter", '/', id: "logo" %>
+      <% if signed_in? and current_user.invitations.any? %>
+        <ul class="nav pull-left">
+          <li id="fat-menu" class="dropdown">
+            <a href='#' class="dropdown-toggle btn-warning" data-toggle="dropdown">
+                <%=pluralize(current_user.invitations.count, "invitation")%> <b class="caret"></b>
+            </a>
+            <%= render 'invitations/invitations' %>
+          </li>
+        </ul>
+      <% end %>
       <nav>
         <ul class="nav pull-right">
           <li><%= link_to "Home",    root_path %></li>

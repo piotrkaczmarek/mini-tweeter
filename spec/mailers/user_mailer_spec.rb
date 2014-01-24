@@ -13,7 +13,7 @@ describe UserMailer do
         mail.to.should eq([user.email])
       end
       it "renders the sender email" do
-        mail.from.should eq(["from@example.com"])
+        mail.from.should eq(["minitweeter@gmail.com"])
       end
     end
     it "assigns name" do

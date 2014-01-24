@@ -11,4 +11,14 @@ module UsersHelper
       nil
     end
   end
+
+  def already_invited?
+    @invitation = Invitation.where(user_id: @user.id, organization_id: @org_admined_by_current_user)
+    not @invitation.empty?
+  end
+
+  def already_member?
+    @user.organization_id == @org_admined_by_current_user.id
+  end
+
 end

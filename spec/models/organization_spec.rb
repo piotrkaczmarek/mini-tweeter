@@ -60,5 +60,61 @@ describe Organization do
     end
   end
 
+  describe "#invite" do
+    before do 
+      @admin = FactoryGirl.create(:user)
+      @user = FactoryGirl.create(:user)
+      @organization = Organization.create(name: "org1", admin_id: @admin.id)
+    end
+    describe "when user is already a member" do
+      before { @user.add_to @organization }
+      it "should not invite him" do
+        @organization.invite(@user)
+        expect(@organization.invited_users).to_not include(@user)
+      end
+      it "should not change Invitation count" do
+        expect do
+          @organization.invite @user
+        end.to change(Invitation, :count).by(0)
+      end
+    end
+   
+    describe "when user is not a member" do
+      it "should include user in invited users" do
+        @organization.invite @user
+        expect(@organization.invited_users).to include(@user)
+      end
+      it "should change Invitation count" do
+        expect do
+          @organization.invite @user
+        end.to change(Invitation, :count).by(1)
+      end
+    end
+
+    describe "when user is already invited" do
+      before do
+        Invitation.create(user_id: @user.id, organization_id: @organization.id)
+      end
+      it "should not change Invitation count" do
+        expect do
+          @organization.invite @user
+        end.to change(Invitation, :count).by(0)
+      end
+    end
+   
+    describe "when user is a member of different organization" do
+      it "should include user in invited users" do
+        @organization.invite @user
+        expect(@organization.invited_users).to include(@user)      
+      end
+      it "should change Invitation count" do
+        expect do
+          @organization.invite @user
+        end.to change(Invitation, :count).by(1)
+      end
+    end
+
+
+  end
 
 end

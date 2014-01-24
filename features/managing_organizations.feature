@@ -66,13 +66,6 @@ Background: microposts, users and organizations in database
     And I go to the Org1's members page
     Then I should not see "Ian"
 
-  Scenario: adding member
-    Given I am on Ann's user page
-    And I press "Invite to Org1"
-    Then I should see "Ann added to Org1 successfully!"
-    And I go to the Org1's members page
-    Then I should see "Ann"
-
   Scenario: trying to add member of another organization
     Given I am on Paul's user page
     Then I should not see "Invite " button

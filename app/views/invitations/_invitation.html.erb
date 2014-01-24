@@ -1,0 +1,23 @@
+<li>
+  <div class="row">
+    <div class="span5">
+      <div class="span2">
+        <%=link_to "#{invitation.organization.name}", invitation.organization%>
+      </div>
+      <div class="span1">
+        <%= button_to "Accept",
+               { controller: :invitations, action: :accept,
+                 id: invitation.id },
+               class: "btn btn-info",
+               method: :post %>
+      </div>
+      <div class="span1">
+        <%= button_to "Reject",
+               { controller: :invitations, action: :destroy,
+                 id: invitation.id },
+               class: "btn btn-danger",
+               method: :delete %>
+      </div>
+    </div>
+  </div>
+</li>

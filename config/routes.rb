@@ -21,6 +21,13 @@ TutorialApp::Application.routes.draw do
       get :followers
     end
   end
+  
+  resources :invitations, only: [:create, :destroy] do
+    member do
+      post :accept
+    end
+  end
+
 
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :sessions, only: [:new, :create, :destroy]

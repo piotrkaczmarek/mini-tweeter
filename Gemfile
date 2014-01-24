@@ -8,14 +8,14 @@ gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
 gem 'figaro'
+gem 'pg', '0.15.1'
 
 group :development, :test do
-  gem 'pg', '0.15.1'
-  gem 'rspec-rails', '2.13.1'
-  gem 'guard-rspec', '2.5.0'
-  gem 'spork-rails', '4.0.0'
-  gem 'guard-spork', '1.5.0'
-  gem 'childprocess', '0.3.9'
+  gem 'rspec-rails', '2.14'
+  gem 'guard-rspec'#, '2.5.0'
+  gem 'spork-rails'#, '4.0.0'
+  gem 'guard-spork'#, '1.5.0'
+  gem 'childprocess'#, '0.3.9'
   gem 'debugger'
   gem 'cucumber-rails'
   gem 'cucumber-rails-training-wheels' # some pre-fabbed step definitions
@@ -34,7 +34,6 @@ group :test do
 end
 
 group :production do
-  gem 'pg', '0.15.1'
   gem 'rails_12factor', '0.0.2'
 end
 # Use sqlite3 as the database for Active Record

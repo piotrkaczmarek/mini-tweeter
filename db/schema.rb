@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140121210629) do
+ActiveRecord::Schema.define(version: 20140123211333) do
+
+  create_table "invitations", force: true do |t|
+    t.integer  "organization_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "invitations", ["organization_id", "user_id"], name: "index_invitations_on_organization_id_and_user_id", unique: true, using: :btree
+  add_index "invitations", ["organization_id"], name: "index_invitations_on_organization_id", using: :btree
+  add_index "invitations", ["user_id"], name: "index_invitations_on_user_id", using: :btree
 
   create_table "microposts", force: true do |t|
     t.string   "content"
@@ -53,7 +64,9 @@ ActiveRecord::Schema.define(version: 20140121210629) do
     t.integer  "followed_organization_id"
   end
 
+  add_index "relationships", ["followed_organization_id"], name: "index_relationships_on_followed_organization_id", using: :btree
   add_index "relationships", ["followed_user_id"], name: "index_relationships_on_followed_user_id", using: :btree
+  add_index "relationships", ["follower_id", "followed_organization_id"], name: "index_relationships_on_follower_id_and_followed_organization_id", unique: true, using: :btree
   add_index "relationships", ["follower_id", "followed_user_id"], name: "index_relationships_on_follower_id_and_followed_user_id", unique: true, using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
 

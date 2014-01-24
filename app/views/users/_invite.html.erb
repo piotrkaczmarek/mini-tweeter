@@ -1,7 +1,7 @@
 <%= button_to "Invite to #{@org_admined_by_current_user.name}",
-               { controller: :organizations, action: :add_member,
-                 id: @org_admined_by_current_user.id,
-                 new_member_id: @user.id },
+               { controller: :invitations, action: :create,
+                 organization_id: @org_admined_by_current_user.id,
+                 user_id: @user.id },
                class: "btn btn-large btn-primary",
                method: :post %>
 

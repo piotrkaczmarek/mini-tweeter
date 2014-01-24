@@ -12,6 +12,9 @@ class User < ActiveRecord::Base
 
   has_many :followed_organizations, through: :relationships, source: :followed_organization
 
+  has_many :invitations, foreign_key: "user_id", dependent: :destroy
+  has_many :organizations_that_invited, through: :invitations, source: :organization
+
   before_save { self.email = self.email.downcase }
   before_create :create_remember_token
   validates :name, presence: true, length: { maximum: 50 }
@@ -40,7 +43,7 @@ class User < ActiveRecord::Base
 
   def follow!(other_user)
     hash = eval("{ followed_#{other_user.class.name.downcase}_id: #{other_user.id} }")
-    relationships.create!(hash)
+    relationships.create!(hash) unless following? other_user
   end
 
   def unfollow!(other_user)
@@ -49,7 +52,6 @@ class User < ActiveRecord::Base
   end
 
   def add_to(organization)
-    begin
       if organization
         self.disable_password_validation
         self.update_attributes(organization_id: organization.id)
@@ -57,9 +59,6 @@ class User < ActiveRecord::Base
       else
         false
       end
-    rescue
-      false
-    end
   end
 
   def remove_from_organization
@@ -69,6 +68,10 @@ class User < ActiveRecord::Base
 
   def is_admin_of?(organization)
     self.id == organization.admin_id
+  end
+
+  def admined_organization
+    Organization.find_by_admin_id(self.id)
   end
 
   def disable_password_validation
