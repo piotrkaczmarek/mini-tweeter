@@ -22,4 +22,5 @@ FactoryGirl.define do
     #association :admin, factory: :user
     #admin_id admin.id
   end
+
 end

@@ -1,25 +1,6 @@
-<%= form_for(@micropost) do |f| %>
-  <%= render 'shared/error_messages', object: f.object %>
-  <%if @original_post %>
-    <%= "#{@original_post.user.name} wrote #{time_ago_in_words(@original_post.created_at)} ago:" %>
-    <div class="content">
-      <%= @original_post.content %>
-    </div>
-  <% end %> 
-  <div class="field">
-    <%= f.text_area :content, placeholder: "Compose new micropost..." %>
-    <% if @original_post %>
-      <%= f.hidden_field :answer_to_id, value: @original_post.id%>
-    <% end %>
-  </div>
-  <% if ENV["USE_FILE_ATTACHMENTS"] == "true" %>
-    <%= f.file_field :file %>
-  <% end %>
-  <% if @current_user.organization_id %>
-    <div class="checkbox">
-     Post as organization
-      <%= f.check_box :organization_id, {}, "#{@current_user.organization_id}", "nil" %>
-    </div>
-  <% end %>
-  <%= f.submit "Post", class: "btn btn-large btn-primary" %>
+<% if ENV["USE_FILE_ATTACHMENTS"] == "true" %>
+  <%= render 'shared/micropost_form_with_attachments' %>
+<% else %>
+  <%= render 'shared/micropost_form_without_attachments' %>
 <% end %>
+

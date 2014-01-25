@@ -1,0 +1,6 @@
+  <% if micropost.attachments.any? %>
+    <% micropost.attachments.each do |attachment| %>
+      <%= link_to attachment.file_file_name, attachment.file.url %>
+    <% end %>
+    <br>
+  <% end %>

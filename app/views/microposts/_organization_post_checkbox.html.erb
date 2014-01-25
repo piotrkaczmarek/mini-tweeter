@@ -1,0 +1,6 @@
+<% if @current_user.organization_id %>
+  <div class="checkbox">
+   Post as organization
+    <%= f.check_box :organization_id, {}, "#{@current_user.organization_id}", "nil" %>
+  </div>
+<% end %>

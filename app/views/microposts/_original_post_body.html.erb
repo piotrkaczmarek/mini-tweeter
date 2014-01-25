@@ -1,0 +1,25 @@
+   <%if micropost.answer_to_id %>
+     <% original_post = micropost.answer_to %>
+     <div class="row-fluid">
+       <div class="span2">
+         Answer to
+       </div>
+       <div class="span10">
+         <div class="row">
+           <div class="content">
+             <%= original_post.content %>
+           </div>
+
+         </div>
+  <%= render 'microposts/attachments', micropost: original_post %>
+         <div class="row timestamp">
+           <div class="span8">
+             Posted by 
+             <%= link_to original_post.user.name, original_post.user %> 
+             <%= "#{time_ago_in_words(original_post.created_at)} ago." %>
+           </div>
+         </div>
+       </div>
+     </div>
+     <br>
+   <% end %> 

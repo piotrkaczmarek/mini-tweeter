@@ -1,0 +1,5 @@
+      <% if (current_user?(micropost.user) and not micropost.answered?) %>
+        <%= button_to "delete", micropost, method: :delete,
+                                       class: "btn btn-mini btn-danger",
+                                       data: { confirm: "Are you sure?" }%>
+      <% end %>

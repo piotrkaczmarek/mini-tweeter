@@ -1,0 +1,12 @@
+<%= form_for(@micropost) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <% if @original_post %>
+    <%= render 'microposts/original_post', f: f %>
+    <%= f.hidden_field :answer_to_id, value: @original_post.id%>
+  <% end %>
+  <div class="field">
+    <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+  </div>
+  <%= render 'microposts/organization_post_checkbox', f: f %>
+  <%= f.submit "Post", class: "btn btn-large btn-primary" %>
+<% end %>

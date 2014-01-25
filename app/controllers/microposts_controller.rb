@@ -41,7 +41,9 @@ class MicropostsController < ApplicationController
   private
 
     def micropost_params
-      params.require(:micropost).permit(:content, :answer_to_id, :organization_id)
+      params.require(:micropost)
+        .permit(:content, :organization_id, :answer_to_id,
+         attachments_attributes: [{}, :file, :_destroy])
     end
 
     def correct_user

@@ -1,0 +1,7 @@
+<%if @original_post %>
+  <%= "#{@original_post.user.name} wrote #{time_ago_in_words(@original_post.created_at)} ago:" %>
+  <div class="content">
+    <%= @original_post.content %>
+  </div>
+  <%= render 'microposts/attachments', micropost: @original_post %>
+<% end %> 

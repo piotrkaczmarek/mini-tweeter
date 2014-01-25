@@ -9,6 +9,8 @@ gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
 gem 'figaro'
 gem 'pg', '0.15.1'
+gem 'paperclip', "~> 3.0"
+gem 'nested_form'
 
 group :development, :test do
   gem 'rspec-rails', '2.14'

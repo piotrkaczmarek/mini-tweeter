@@ -1,0 +1,27 @@
+<%= nested_form_for(@micropost) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <% if @original_post %>
+    <%= render 'microposts/original_post', f: f %>
+    <%= f.hidden_field :answer_to_id, value: @original_post.id%>
+  <% end %>
+  <div class="field">
+    <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+  </div>
+
+
+  <%= f.fields_for :attachments do |attachment_form| %>
+    <div class="row">
+      <div class="span12">
+        <div class="span11">
+          <%= attachment_form.file_field :file %>
+        </div>
+        <div class="span1">
+          <%= attachment_form.link_to_remove "x", class: "btn btn-mini btn-danger" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <p><%= f.link_to_add "Add file", :attachments %></p>
+  <%= render 'microposts/organization_post_checkbox', f: f %>
+  <%= f.submit "Post", class: "btn btn-large btn-primary" %>
+<% end %>

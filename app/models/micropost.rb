@@ -2,6 +2,8 @@ class Micropost < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
   has_many :rates, dependent: :destroy
+  has_many :attachments, dependent: :destroy
+  accepts_nested_attributes_for :attachments
   default_scope -> { order('created_at DESC') }
   before_validation :clear_rating
   validates :user_id, presence: true

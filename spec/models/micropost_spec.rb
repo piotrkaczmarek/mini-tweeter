@@ -22,6 +22,7 @@ describe Micropost do
     it { should respond_to(:answer_to) }
     it { should respond_to(:answer_to_id) }
     it { should respond_to(:answered?) }
+    it { should respond_to(:attachments) }
 
     it { should be_valid }
 
