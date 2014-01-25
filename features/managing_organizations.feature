@@ -66,8 +66,4 @@ Background: microposts, users and organizations in database
     And I go to the Org1's members page
     Then I should not see "Ian"
 
-  Scenario: trying to add member of another organization
-    Given I am on Paul's user page
-    Then I should not see "Invite " button
-    And I should not see "Uninvite" button
     
