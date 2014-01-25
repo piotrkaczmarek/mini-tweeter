@@ -12,7 +12,9 @@
       <%= f.hidden_field :answer_to_id, value: @original_post.id%>
     <% end %>
   </div>
-  <%= f.file_field :file %>
+  <% if ENV["USE_FILE_ATTACHMENTS"] == "true" %>
+    <%= f.file_field :file %>
+  <% end %>
   <% if @current_user.organization_id %>
     <div class="checkbox">
      Post as organization
