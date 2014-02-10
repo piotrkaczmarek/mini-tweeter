@@ -7,9 +7,9 @@ class UsersController < ApplicationController
   def index
     if params[:q]
       regex = "^#{params[:q]}"
-      @users = User.where("name ~* ?",regex).paginate(page: params[:page])
+      @users = User.select("id","name","organization_id").where("name ~* ?",regex).paginate(page: params[:page])
     else
-      @users = User.paginate(page: params[:page])
+      @users = User.select("id","name","organization_id").paginate(page: params[:page])
     end
   end
 
