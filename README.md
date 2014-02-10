@@ -3,7 +3,7 @@ MINI-TWEETER
 
 
 This is a demo app developed as a university project (graded 5.0/5.0).
-Based on Micheal Hart's http://ruby.railstutorial.org
+Based on Michael Hartl's http://ruby.railstutorial.org
 
 Additional features:
 * Rating microposts
